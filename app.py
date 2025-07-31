@@ -678,7 +678,7 @@ def flag_resource(resource_id):
 # Quiz Management Routes
 @app.route('/quizzes/create', methods=['GET', 'POST'])
 @login_required
-def create_quiz():
+def create_quiz_page():
     if not current_user.can_upload():
         flash('Access denied')
         return redirect(url_for('dashboard'))
