@@ -725,7 +725,7 @@ def create_quiz_page():
 
 @app.route('/quizzes/<int:quiz_id>/edit')
 @login_required
-def edit_quiz(quiz_id):
+def edit_quiz_page(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
     
     # Check permissions
