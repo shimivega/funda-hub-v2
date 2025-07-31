@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-bg relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="text-center">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                Welcome to <span class="text-yellow-300">Funda App</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto">
+                Your comprehensive education platform for South African learners. 
+                From Grade R to Grade 12 and ABET programs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="{{ url_for('register') }}" 
+                   class="bg-yellow-400 hover:bg-yellow-500 text-gray-900 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                    Get Started Free
+                </a>
+                <a href="{{ url_for('login') }}" 
+                   class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+                    Sign In
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="py-20 bg-white dark:bg-gray-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                Everything You Need to Learn
+            </h2>
+            <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                From interactive quizzes to AI tutoring, we've got all the tools to help you succeed.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Interactive Learning</h3>
+                <p class="text-gray-600 dark:text-gray-300">Engage with interactive quizzes, videos, and digital textbooks.</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-users text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Study Groups</h3>
+                <p class="text-gray-600 dark:text-gray-300">Connect with peers and join study groups for collaborative learning.</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-robot text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">AI Tutor</h3>
+                <p class="text-gray-600 dark:text-gray-300">Get personalized help from our AI study assistant 24/7.</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-book text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Digital Library</h3>
+                <p class="text-gray-600 dark:text-gray-300">Access textbooks from Siyavula, WCED, and other trusted sources.</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-comments text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Communication</h3>
+                <p class="text-gray-600 dark:text-gray-300">Chat with teachers and classmates using our WhatsApp-style messaging.</p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-globe text-white text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Multi-Language</h3>
+                <p class="text-gray-600 dark:text-gray-300">Available in English, isiZulu, Sesotho, and Afrikaans.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CTA Section -->
+<div class="bg-gray-50 dark:bg-gray-800 py-16">
+    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Ready to Start Learning?
+        </h2>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+            Join thousands of South African students already using Funda App to excel in their studies.
+        </p>
+        <a href="{{ url_for('register') }}" 
+           class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold text-lg transition-colors">
+            Create Your Free Account
+        </a>
+    </div>
+</div>
+{% endblock %}
