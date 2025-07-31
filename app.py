@@ -573,9 +573,9 @@ def upload_resource():
     return jsonify({'error': 'Invalid file type'}), 400
 
 # Enhanced resource routes with visibility filtering
-@app.route('/resources')
+@app.route('/resources/visibility')
 @login_required
-def resources():
+def resources_with_visibility():
     grade = request.args.get('grade', '')
     subject = request.args.get('subject', '')
     resource_type = request.args.get('type', '')
