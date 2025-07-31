@@ -1,0 +1,23 @@
+[
+  {
+    "grade": "Grade 4",
+    "subject": "Life Skills",
+    "language": "Afrikaans",
+    "topic": "Personal Health and Hygiene",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Hoeveel keer per dag moet jy jou tande borsel?",
+        "options": [
+          "Een keer",
+          "Twee keer",
+          "Drie keer",
+          "Slegs as dit seer is"
+        ],
+        "correctAnswer": "Twee keer",
+        "explanation": "Dit is belangrik om jou tande ten minste twee keer per dag te borsel om dit skoon en gesond te hou."
+      }
+    ]
+  }
+]

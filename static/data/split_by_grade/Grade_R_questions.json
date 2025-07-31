@@ -1,0 +1,23 @@
+[
+  {
+    "grade": "Grade R",
+    "subject": "Life Skills",
+    "language": "isiXhosa",
+    "topic": "My Body and Health",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Leliphi ilungu lomzimba olisebenzisayo ukubona izinto?",
+        "options": [
+          "Iindlebe",
+          "Amehlo",
+          "Umlomo",
+          "Izandla"
+        ],
+        "correctAnswer": "Amehlo",
+        "explanation": "Sisebenzisa amehlo ethu ukubona izinto ezisingqongileyo."
+      }
+    ]
+  }
+]

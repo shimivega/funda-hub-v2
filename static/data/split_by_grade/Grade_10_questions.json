@@ -1,0 +1,86 @@
+[
+  {
+    "grade": "Grade 10",
+    "subject": "Mathematics",
+    "language": "isiZulu",
+    "topic": "Algebraic Expressions",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Yimaphi amafomula asetshenziswa ukubala indawo ye-triangle?",
+        "options": [
+          "A = bh",
+          "A = 1/2bh",
+          "A = ab",
+          "A = r^2π"
+        ],
+        "correctAnswer": "A = 1/2bh",
+        "explanation": "Indawo ye-triangle ibalwa ngo-1/2 ubude × ukuphakama (half base times height)."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "Geography",
+    "language": "isiXhosa",
+    "topic": "Umhlaba Nendalo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Yintoni umhlaba ojikelezayo?",
+        "options": [
+          "Ilanga",
+          "Inyanga",
+          "Umhlaba",
+          "Ilanga nenyanga"
+        ],
+        "correctAnswer": "Umhlaba",
+        "explanation": "Umhlaba ujikeleza ilanga kwaye inyanga ijikeleza umhlaba."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "Life Sciences",
+    "language": "isiZulu",
+    "topic": "Izakhi Zempilo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "short-answer",
+        "question": "Iyini umsebenzi we-mitochondrion eselulwaneni?",
+        "correctAnswer": "Ukuvelisa amandla e-ATP",
+        "explanation": "I-mitochondrion iyingxenye yesel eyenza amandla e-ATP ngokusebenzisa i-cellular respiration."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "English",
+    "language": "English",
+    "topic": "Reading Comprehension",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "comprehension",
+        "passage": "Nelson Mandela was imprisoned for 27 years. Upon his release, he led South Africa into democracy and became the country's first Black president in 1994.",
+        "questions": [
+          {
+            "question": "How long was Nelson Mandela imprisoned?",
+            "type": "short-answer",
+            "correctAnswer": "27 years",
+            "explanation": "The passage clearly states he was imprisoned for 27 years."
+          },
+          {
+            "question": "What leadership role did he take after release?",
+            "type": "short-answer",
+            "correctAnswer": "President",
+            "explanation": "He became South Africa's first Black president in 1994."
+          }
+        ]
+      }
+    ]
+  }
+]

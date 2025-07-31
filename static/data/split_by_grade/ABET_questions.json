@@ -1,0 +1,23 @@
+[
+  {
+    "grade": "ABET",
+    "subject": "Languages",
+    "language": "Sesotho",
+    "topic": "Puo le Tlhahlobo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke lentsoe lefe le supang nako e fetileng?",
+        "options": [
+          "Ke ea",
+          "Ke ile",
+          "Ke tla ea",
+          "Ke eme"
+        ],
+        "correctAnswer": "Ke ile",
+        "explanation": "'Ke ile' ke lentsoe le supang nako e fetileng Sesothong."
+      }
+    ]
+  }
+]

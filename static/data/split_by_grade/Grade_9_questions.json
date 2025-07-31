@@ -1,0 +1,50 @@
+[
+  {
+    "grade": "Grade 9",
+    "subject": "History",
+    "language": "English",
+    "topic": "South African History",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "essay",
+        "question": "Discuss the impact of apartheid on education in South Africa.",
+        "instruction": "Write at least 150 words explaining how apartheid laws affected schools and learners.",
+        "explanation": "Consider the Bantu Education Act, unequal funding, language policies, and long-term effects."
+      },
+      {
+        "type": "essay",
+        "question": "Explain the causes of the Mineral Revolution in South Africa.",
+        "instruction": "Write a well-structured paragraph. Mention key minerals discovered and how it changed the economy.",
+        "explanation": "Focus on diamond and gold discoveries, labor migration, and economic transformation."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 9",
+    "subject": "History",
+    "language": "English",
+    "topic": "South African History - Essays",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "essay",
+        "question": "Describe the causes and effects of deforestation in South Africa.",
+        "instruction": "Write a comprehensive essay discussing the main causes of deforestation and its environmental and social impacts.",
+        "explanation": "Consider factors like urbanization, agriculture, mining, and the effects on biodiversity and communities."
+      },
+      {
+        "type": "essay",
+        "question": "Write an essay on the impact of Apartheid on South African education.",
+        "instruction": "Discuss how apartheid policies affected educational opportunities and quality for different racial groups.",
+        "explanation": "Focus on the Bantu Education Act, resource allocation, and long-term consequences."
+      },
+      {
+        "type": "essay",
+        "question": "Discuss how HIV/AIDS affects the youth in South Africa.",
+        "instruction": "Analyze the social, economic, and health impacts of HIV/AIDS on young people in South Africa.",
+        "explanation": "Consider prevention, treatment, stigma, and support systems."
+      }
+    ]
+  }
+]

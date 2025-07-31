@@ -1,0 +1,71 @@
+[
+  {
+    "grade": "Grade 12",
+    "subject": "History",
+    "language": "isiZulu",
+    "topic": "Umlando WaseNingizimu Afrika",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ubani owaqala i-ANC?",
+        "options": [
+          "Nelson Mandela",
+          "Albert Luthuli",
+          "John Dube",
+          "Oliver Tambo"
+        ],
+        "correctAnswer": "John Dube",
+        "explanation": "UJohn Dube wayengomunye wabasunguli be-ANC ngo-1912."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 12",
+    "subject": "Physical Sciences",
+    "language": "Sepedi",
+    "topic": "Organic Chemistry - Alkanes",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke eng leina la IUPAC la CH₃CH(CH₃)CH₂CH₃?",
+        "options": [
+          "2-Methylbutane",
+          "Pentane",
+          "2,2-Dimethylpropane",
+          "Isopentane"
+        ],
+        "correctAnswer": "2-Methylbutane",
+        "explanation": "Molekule ye e na le ketane e telele ya dikhabone tše nne (butane) ka sehlopha sa methyl (CH₃) go khabone ya bobedi."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 12",
+    "subject": "Geography",
+    "language": "Sesotho",
+    "topic": "Tikoloho le Phetoho ya Boemo ba Leholimo",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "comprehension",
+        "passage": "Ho na le leqhubu le matla la mocheso Afrika Borwa nakong ea lehlabula. Sena se ama temo hampe le bophelo ba batho.",
+        "questions": [
+          {
+            "question": "Leqhubu la mocheso le ama eng haholo?",
+            "type": "short-answer",
+            "correctAnswer": "Temo le bophelo ba batho",
+            "explanation": "Khatiso e bolela hore leqhubu la mocheso le ama temo le bophelo ba batho."
+          },
+          {
+            "question": "Ke nakong efe ea selemo moo leqhubu lena le hlahang?",
+            "type": "short-answer",
+            "correctAnswer": "Lehlabula",
+            "explanation": "Khatiso e bolela hore leqhubu la mocheso le hlaha nakong ea lehlabula."
+          }
+        ]
+      }
+    ]
+  }
+]

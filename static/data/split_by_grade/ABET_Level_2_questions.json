@@ -1,0 +1,23 @@
+[
+  {
+    "grade": "ABET Level 2",
+    "subject": "Literacy (English)",
+    "language": "English",
+    "topic": "Basic Reading Comprehension",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Which word means to 'look for information'?",
+        "options": [
+          "Hide",
+          "Search",
+          "Close",
+          "Forget"
+        ],
+        "correctAnswer": "Search",
+        "explanation": "To 'search' means to look carefully for something."
+      }
+    ]
+  }
+]

@@ -1,0 +1,59 @@
+[
+  {
+    "grade": "Grade 8",
+    "subject": "Life Sciences",
+    "language": "isiZulu",
+    "topic": "Izitshalo Nezilwane",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "short-answer",
+        "question": "Iyiphi ingxenye yesitshalo eyenza ama-carbohydrates ngesikhathi sokuphotosynthesis?",
+        "correctAnswer": "Amahlamvu",
+        "explanation": "Amahlamvu ayingxenye yesitshalo eyenza ukudla ngokusebenzisa ukukhanya kwelanga."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 8",
+    "subject": "Life Sciences",
+    "language": "Sepedi",
+    "topic": "Diphedi tša Dimela",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke eng yeo e diregago ka gare ga sel?",
+        "options": [
+          "Photosynthesis",
+          "Osmosis",
+          "Diffusion",
+          "Respiration"
+        ],
+        "correctAnswer": "Photosynthesis",
+        "explanation": "Photosynthesis ke tshepedišo yeo e diregago ka gare ga disel tša dimela."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 8",
+    "subject": "EMS",
+    "language": "Afrikaans",
+    "topic": "Ekonomiese Bestuur",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Wat is 'n voorbeeld van vaste koste?",
+        "options": [
+          "Huur",
+          "Waterrekening",
+          "Telefoonkoste",
+          "Brandstof"
+        ],
+        "correctAnswer": "Huur",
+        "explanation": "Huur is 'n vaste koste omdat dit elke maand dieselfde bedrag is."
+      }
+    ]
+  }
+]

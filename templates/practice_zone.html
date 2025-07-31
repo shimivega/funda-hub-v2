@@ -22,17 +22,21 @@
         <!-- Filters -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Filter Quizzes</h3>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grade</label>
-                    <select id="grade-filter" class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white">
+                    <label for="grade-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Grade</label>
+                    <select id="grade-filter" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white" onchange="onGradeFilterChange(this.value)">
                         <option value="">All Grades</option>
-                        <option value="Grade R">Grade R</option>
-                        <option value="4">Grade 4</option>
-                        <option value="7">Grade 7</option>
-                        <option value="10">Grade 10</option>
-                        <option value="12">Grade 12</option>
-                        <option value="ABET Level 2">ABET Level 2</option>
+                        <option value="Grade_7">Grade 7</option>
+                        <option value="Grade_8">Grade 8</option>
+                        <option value="Grade_9">Grade 9</option>
+                        <option value="Grade_10">Grade 10</option>
+                        <option value="Grade_11">Grade 11</option>
+                        <option value="Grade_12">Grade 12</option>
+                        <option value="ABET">ABET</option>
+                        <option value="ABET_Level_2">ABET Level 2</option>
+                        <option value="Grade_R">Grade R</option>
+                        <option value="Grade_4">Grade 4</option>
                     </select>
                 </div>
                 <div>
@@ -60,9 +64,20 @@
             </div>
         </div>
 
-        <!-- Available Quizzes -->
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="hidden text-center py-12">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500 mb-4"></div>
+            <p class="text-gray-600 dark:text-gray-300">Loading questions...</p>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message" class="hidden bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded">
+            <p>Failed to load questions. Please try again later or check your connection.</p>
+        </div>
+
+        <!-- Quiz List -->
         <div id="quiz-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Quiz cards will be populated here -->
+            <!-- Quizzes will be dynamically inserted here -->
         </div>
     </div>
 
@@ -70,12 +85,14 @@
     <div id="quiz-interface" class="hidden">
         <!-- Progress Bar -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="quiz-title" class="text-xl font-bold text-gray-900 dark:text-white"></h3>
-                <span id="question-counter" class="text-sm text-gray-500 dark:text-gray-400"></span>
-            </div>
-            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
-                <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500" style="width: 0%"></div>
+            <div class="flex flex-col">
+                <div class="flex justify-between items-center mb-2">
+                    <h3 id="quiz-title" class="text-xl font-bold text-gray-900 dark:text-white">Quiz</h3>
+                    <span id="question-counter" class="text-sm text-gray-500 dark:text-gray-400"></span>
+                </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
+                    <div id="progress-bar" class="h-full bg-gradient-to-r from-blue-500 to-purple-600 rounded-full transition-all duration-300"></div>
+                </div>
             </div>
         </div>
 
@@ -146,7 +163,7 @@
     <div id="results-screen" class="hidden">
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 text-center">
             <div class="mb-6">
-                <div id="score-circle" class="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl font-bold text-white" style="background: conic-gradient(#10b981 0deg, #10b981 0deg, #e5e7eb 0deg, #e5e7eb 360deg);">
+                <div id="score-circle" class="w-32 h-32 mx-auto mb-4 rounded-full flex items-center justify-center text-4xl font-bold text-white bg-gradient-conic from-green-500 via-green-500 to-gray-300">
                     <span id="score-percentage">0%</span>
                 </div>
                 <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Quiz Complete!</h3>
@@ -181,33 +198,85 @@
 </div>
 
 <script>
-// Quiz data will be loaded from JSON file
+// Quiz data will be loaded from JSON files by grade
 let quizData = [];
+let loadedGrades = new Set();
 
-async function loadQuizData() {
+async function loadQuizData(grade = null) {
     try {
-        // Try Flask URL first, then fallback to relative path
-        let url = '{{ url_for("static", filename="data/practice_zone_questions.json") }}';
-        if (url.includes('{{')) {
-            // If Flask templating didn't work, use relative path
-            url = '../static/data/practice_zone_questions.json';
+        if (grade && loadedGrades.has(grade)) {
+            console.log(`Quiz data for ${grade} already loaded`);
+            return;
+        }
+
+        // Show loading state
+        document.getElementById('quiz-interface').classList.add('hidden');
+        document.getElementById('quiz-list').classList.add('hidden');
+        document.getElementById('loading-indicator').classList.remove('hidden');
+
+        // If no specific grade is requested, load all grades
+        const gradesToLoad = grade ? [grade] : [
+            'Grade_7', 'Grade_8', 'Grade_9', 'Grade_10', 
+            'Grade_12', 'ABET', 'ABET_Level_2', 'Grade_R', 'Grade_4'
+        ];
+
+        let allQuizzes = [];
+        
+        // Load each grade's questions
+        for (const gradeToLoad of gradesToLoad) {
+            if (loadedGrades.has(gradeToLoad)) continue;
+            
+            try {
+                const filename = `${gradeToLoad}_questions.json`;
+                let url = `{{ url_for('static', filename='data/split_by_grade/') }}${filename}`;
+                
+                if (url.includes('{{')) {
+                    // Fallback to relative path if Flask templating didn't work
+                    url = `../static/data/split_by_grade/${filename}`;
+                }
+                
+                const response = await fetch(url);
+                if (!response.ok) {
+                    console.warn(`Failed to load quiz data for ${gradeToLoad}`);
+                    continue;
+                }
+                
+                const gradeData = await response.json();
+                allQuizzes = allQuizzes.concat(gradeData);
+                loadedGrades.add(gradeToLoad);
+                console.log(`Loaded ${gradeData.length} quizzes for ${gradeToLoad}`);
+            } catch (error) {
+                console.error(`Error loading ${gradeToLoad} questions:`, error);
+            }
+        }
+
+        if (allQuizzes.length > 0) {
+            // If loading specific grade, replace the quiz data
+            // Otherwise, append to existing data
+            quizData = grade ? allQuizzes : [...quizData, ...allQuizzes];
+            console.log('Total quizzes loaded:', quizData.length);
+        } else if (quizData.length === 0) {
+            // Only use fallback if no data was loaded at all
+            throw new Error('No quiz data could be loaded');
         }
         
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error('Failed to load quiz data');
-        }
-        quizData = await response.json();
-        console.log('Quiz data loaded successfully:', quizData.length, 'quizzes');
+        // Hide loading state and show quizzes
+        document.getElementById('loading-indicator').classList.add('hidden');
+        document.getElementById('quiz-list').classList.remove('hidden');
+        
     } catch (error) {
         console.error('Error loading quiz data:', error);
-        console.log('Using fallback quiz data...');
-        // Fallback to comprehensive sample data if file loading fails
-        quizData = [
-            {
-                grade: "Grade 7",
-                subject: "Mathematics",
-                language: "English",
+        document.getElementById('loading-indicator').classList.add('hidden');
+        document.getElementById('error-message').classList.remove('hidden');
+        
+        // Fallback to minimal sample data if no data was loaded
+        if (quizData.length === 0) {
+            console.log('Using fallback quiz data...');
+            quizData = [
+                {
+                    grade: "Grade 7",
+                    subject: "Mathematics",
+                    language: "English",
                 topic: "Basic Arithmetic",
                 difficulty: "beginner",
                 questions: [
@@ -569,53 +638,141 @@ function setupFilters() {
     });
 }
 
+// Handle grade filter change
+async function onGradeFilterChange(grade) {
+    if (grade) {
+        // Show loading state
+        document.getElementById('quiz-list').classList.add('hidden');
+        document.getElementById('loading-indicator').classList.remove('hidden');
+        document.getElementById('error-message').classList.add('hidden');
+        
+        // Load questions for the selected grade
+        await loadQuizData(grade);
+        
+        // Update subject and language filters based on available data
+        updateFilters();
+        
+        // Display the quizzes
+        displayQuizList();
+    } else {
+        // Show all grades
+        displayQuizList();
+    }
+}
+
+// Update subject and language filters based on available data
+function updateFilters() {
+    // Get unique subjects and languages from the loaded quizzes
+    const subjects = new Set();
+    const languages = new Set();
+    
+    quizData.forEach(quiz => {
+        if (quiz.subject) subjects.add(quiz.subject);
+        if (quiz.language) languages.add(quiz.language);
+    });
+    
+    // Update subject filter
+    const subjectSelect = document.getElementById('subject-filter');
+    const currentSubject = subjectSelect.value;
+    
+    // Save current subject selection
+    subjectSelect.innerHTML = '<option value="">All Subjects</option>';
+    Array.from(subjects).sort().forEach(subject => {
+        const option = document.createElement('option');
+        option.value = subject;
+        option.textContent = subject;
+        if (subject === currentSubject) option.selected = true;
+        subjectSelect.appendChild(option);
+    });
+    
+    // Update language filter
+    const languageSelect = document.getElementById('language-filter');
+    const currentLanguage = languageSelect.value;
+    
+    languageSelect.innerHTML = '<option value="">All Languages</option>';
+    Array.from(languages).sort().forEach(language => {
+        const option = document.createElement('option');
+        option.value = language;
+        option.textContent = language;
+        if (language === currentLanguage) option.selected = true;
+        languageSelect.appendChild(option);
+    });
+}
+
 function displayQuizList() {
     const gradeFilter = document.getElementById('grade-filter').value;
     const subjectFilter = document.getElementById('subject-filter').value;
     const languageFilter = document.getElementById('language-filter').value;
 
+    // Filter quizzes based on current filters
     const filteredQuizzes = quizData.filter(quiz => {
-        return (!gradeFilter || quiz.grade.toString() === gradeFilter) &&
-               (!subjectFilter || quiz.subject === subjectFilter) &&
-               (!languageFilter || quiz.language === languageFilter);
+        const matchesGrade = !gradeFilter || 
+                           quiz.grade.toString().replace(/\s+/g, '_') === gradeFilter || 
+                           quiz.grade.toString() === gradeFilter.replace(/_/g, ' ');
+        const matchesSubject = !subjectFilter || quiz.subject === subjectFilter;
+        const matchesLanguage = !languageFilter || quiz.language === languageFilter;
+        
+        return matchesGrade && matchesSubject && matchesLanguage;
     });
 
     const quizList = document.getElementById('quiz-list');
     quizList.innerHTML = '';
 
-    filteredQuizzes.forEach((quiz, index) => {
-        const quizCard = document.createElement('div');
-        quizCard.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:transform hover:-translate-y-1';
-        quizCard.onclick = () => startQuiz(quiz);
+    if (filteredQuizzes.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.className = 'col-span-full text-center py-8 text-gray-500 dark:text-gray-400';
+        noResults.textContent = 'No quizzes found matching your criteria.';
+        if (gradeFilter && quizData.length === 0) {
+            noResults.textContent = 'Loading questions...';
+            // Trigger loading if no quizzes are found but a grade is selected
+            onGradeFilterChange(gradeFilter);
+        }
+        quizList.appendChild(noResults);
+        return;
+    }
 
-        const difficultyColor = {
-            'beginner': 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
-            'intermediate': 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
-            'advanced': 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-        }[quiz.difficulty] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
-
-        quizCard.innerHTML = `
-            <div class="flex justify-between items-start mb-4">
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">${quiz.subject}</h3>
-                <span class="px-2 py-1 ${difficultyColor} text-xs rounded-full">${quiz.difficulty}</span>
-            </div>
-            <p class="text-gray-600 dark:text-gray-300 mb-2">Grade ${quiz.grade}</p>
-            <p class="text-gray-600 dark:text-gray-300 mb-2">🌍 ${quiz.language}</p>
-            <p class="text-gray-600 dark:text-gray-300 mb-4">${quiz.topic}</p>
-            <div class="flex justify-between items-center">
-                <span class="text-sm text-gray-500 dark:text-gray-400">${quiz.questions.length} questions</span>
-                <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    Start Quiz
-                </button>
-            </div>
-        `;
-
-        quizList.appendChild(quizCard);
+    // Group quizzes by subject for better organization
+    const quizzesBySubject = {};
+    filteredQuizzes.forEach(quiz => {
+        if (!quizzesBySubject[quiz.subject]) {
+            quizzesBySubject[quiz.subject] = [];
+        }
+        quizzesBySubject[quiz.subject].push(quiz);
     });
 
-    if (filteredQuizzes.length === 0) {
-        quizList.innerHTML = '<div class="col-span-full text-center py-8 text-gray-500 dark:text-gray-400">No quizzes found matching your criteria.</div>';
-    }
+    // Display quizzes by subject
+    Object.entries(quizzesBySubject).forEach(([subject, quizzes]) => {
+        const subjectSection = document.createElement('div');
+        subjectSection.className = 'md:col-span-3';
+        subjectSection.innerHTML = `
+            <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">${subject}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                ${quizzes.map(quiz => {
+                    const difficultyColor = {
+                        'beginner': 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200',
+                        'intermediate': 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200',
+                        'advanced': 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                    }[quiz.difficulty?.toLowerCase()] || 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200';
+
+                    return `
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition-all duration-300 hover:transform hover:-translate-y-1" onclick="startQuiz(${JSON.stringify(quiz).replace(/"/g, '&quot;').replace(/'/g, '&#39;')})">
+                            <div class="flex justify-between items-start mb-4">
+                                <h4 class="font-medium text-gray-900 dark:text-white">${quiz.topic || 'Quiz'}</h4>
+                                <span class="px-2 py-1 ${difficultyColor} text-xs rounded-full">${quiz.difficulty || 'unknown'}</span>
+                            </div>
+                            <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">Grade ${quiz.grade} • ${quiz.language || 'English'}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">${quiz.questions?.length || 0} questions</p>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+        `;
+        quizList.appendChild(subjectSection);
+    });
+    
+    // Hide loading indicator and show quiz list
+    document.getElementById('loading-indicator').classList.add('hidden');
+    document.getElementById('quiz-list').classList.remove('hidden');
 }
 
 function startQuiz(quiz) {

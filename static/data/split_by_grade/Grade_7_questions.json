@@ -1,0 +1,113 @@
+[
+  {
+    "grade": "Grade 7",
+    "subject": "Mathematics",
+    "language": "English",
+    "topic": "Basic Arithmetic",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "What is 9 × 8?",
+        "options": [
+          "72",
+          "81",
+          "69",
+          "88"
+        ],
+        "correctAnswer": "72",
+        "explanation": "9 × 8 = 72. This is basic multiplication."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "Which part of the plant is responsible for photosynthesis?",
+        "options": [
+          "Roots",
+          "Stem",
+          "Leaves",
+          "Flowers"
+        ],
+        "correctAnswer": "Leaves",
+        "explanation": "Photosynthesis primarily occurs in the leaves where chloroplasts are located."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "What is the result of 39 + 5?",
+        "options": [
+          "44",
+          "43",
+          "45",
+          "42"
+        ],
+        "correctAnswer": "44",
+        "explanation": "39 + 5 = 44. Simple addition."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 7",
+    "subject": "Mathematics",
+    "language": "Afrikaans",
+    "topic": "Basiese Rekenkunde",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Wat is 9 × 8?",
+        "options": [
+          "72",
+          "81",
+          "69",
+          "88"
+        ],
+        "correctAnswer": "72",
+        "explanation": "9 × 8 = 72. Dit is basiese vermenigvuldiging."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "Wat is die helfte van 144?",
+        "options": [
+          "72",
+          "74",
+          "76",
+          "70"
+        ],
+        "correctAnswer": "72",
+        "explanation": "Die helfte van 144 is 144 ÷ 2 = 72."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 7",
+    "subject": "Natural Sciences",
+    "language": "English",
+    "topic": "Ecosystems and Food Chains",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Which part of the plant is responsible for photosynthesis?",
+        "options": [
+          "Roots",
+          "Stem",
+          "Leaves",
+          "Flowers"
+        ],
+        "correctAnswer": "Leaves",
+        "explanation": "Photosynthesis, the process of making food using sunlight, primarily takes place in the chloroplasts found in leaves."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "What is the primary source of energy for almost all ecosystems on Earth?",
+        "options": [
+          "Water",
+          "Soil",
+          "Sunlight",
+          "Wind"
+        ],
+        "correctAnswer": "Sunlight",
+        "explanation": "Most ecosystems rely on sunlight, which is captured by producers like plants during photosynthesis."
+      }
+    ]
+  }
+]
