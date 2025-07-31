@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Study Groups</h1>
+            <p class="text-gray-600 dark:text-gray-300">Join or create study groups to learn together</p>
+        </div>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+            <i class="fas fa-plus mr-2"></i>Create Group
+        </button>
+    </div>
+
+    <!-- Search and Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex flex-col md:flex-row gap-4">
+            <div class="flex-1">
+                <input type="text" placeholder="Search study groups..." 
+                       class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            </div>
+            <select class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option>All Subjects</option>
+                <option>Mathematics</option>
+                <option>Science</option>
+                <option>English</option>
+                <option>History</option>
+            </select>
+            <select class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option>All Grades</option>
+                <option>Grade 10</option>
+                <option>Grade 11</option>
+                <option>Grade 12</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Study Groups Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Sample Study Group 1 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-calculator text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Grade 12 Math</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">15 members</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Preparing for final exams together. Focus on calculus and algebra.</p>
+            <div class="flex justify-between items-center">
+                <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">Public</span>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Join</button>
+            </div>
+        </div>
+
+        <!-- Sample Study Group 2 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-flask text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Science Squad</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">8 members</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Grade 11 Physical Science study group. Weekly virtual meetings.</p>
+            <div class="flex justify-between items-center">
+                <span class="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">Public</span>
+                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">Join</button>
+            </div>
+        </div>
+
+        <!-- Sample Study Group 3 -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">English Literature</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">12 members</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Discussing novels and poetry for Grade 12 English exams.</p>
+            <div class="flex justify-between items-center">
+                <span class="text-xs bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 px-2 py-1 rounded-full">Private</span>
+                <button class="bg-gray-400 text-white px-4 py-2 rounded-lg text-sm cursor-not-allowed">Request</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

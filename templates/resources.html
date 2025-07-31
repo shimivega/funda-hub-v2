@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Educational Resources</h1>
+            <p class="text-gray-600 dark:text-gray-300">Access textbooks, past exams, and study materials from trusted South African sources</p>
+        </div>
+        <div class="flex space-x-3">
+            {% if current_user.can_upload() %}
+            <a href="{{ url_for('admin_upload') }}" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-upload mr-2"></i>Upload Resource
+            </a>
+            {% endif %}
+            {% if current_user.is_admin() %}
+            <a href="{{ url_for('admin_resources') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-cog mr-2"></i>Manage Resources
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <form method="GET" class="flex flex-col md:flex-row gap-4">
+            <select name="grade" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option value="">All Grades</option>
+                {% for grade in grades %}
+                <option value="{{ grade }}" {% if grade == current_grade %}selected{% endif %}>{{ grade }}</option>
+                {% endfor %}
+            </select>
+            
+            <select name="subject" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option value="">All Subjects</option>
+                {% for subject in subjects %}
+                <option value="{{ subject }}" {% if subject == current_subject %}selected{% endif %}>{{ subject }}</option>
+                {% endfor %}
+            </select>
+            
+            <select name="type" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option value="">All Types</option>
+                {% for type in types %}
+                <option value="{{ type }}" {% if type == current_type %}selected{% endif %}>{{ type }}</option>
+                {% endfor %}
+            </select>
+            
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-search mr-2"></i>Filter
+            </button>
+            
+            <a href="{{ url_for('resources') }}" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-times mr-2"></i>Clear
+            </a>
+        </form>
+    </div>
+
+    <!-- Resources Grid -->
+    {% if resources %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for resource in resources %}
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full flex items-center justify-center bg-gradient-to-br{% if resource.resource_type == 'Textbook' %} from-blue-400 to-blue-600{% elif resource.resource_type == 'Past Exam' %} from-red-400 to-red-600{% elif resource.resource_type == 'Teacher Guide' %} from-green-400 to-green-600{% elif resource.resource_type == 'Worksheet' %} from-yellow-400 to-yellow-600{% else %} from-purple-400 to-purple-600{% endif %}">
+                        <i class="fas text-white text-xl{% if resource.resource_type == 'Textbook' %} fa-book{% elif resource.resource_type == 'Past Exam' %} fa-file-alt{% elif resource.resource_type == 'Teacher Guide' %} fa-chalkboard-teacher{% elif resource.resource_type == 'Worksheet' %} fa-file-pdf{% else %} fa-file{% endif %}"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white line-clamp-2">{{ resource.original_filename }}</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">{{ resource.grade }} • {{ resource.subject }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-2 py-1 rounded-full">
+                        {{ resource.resource_type }}
+                    </span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                        {{ (resource.file_size / 1024 / 1024) | round(1) }} MB
+                    </span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Source: {{ resource.source }}
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Downloads: {{ resource.download_count }}
+                </p>
+            </div>
+            
+            <div class="flex space-x-2">
+                <a href="{{ url_for('download_resource', resource_id=resource.id) }}" 
+                   class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm text-center">
+                    <i class="fas fa-download mr-2"></i>Download
+                </a>
+                {% if resource.source_url %}
+                <a href="{{ resource.source_url }}" target="_blank" 
+                   class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-external-link-alt"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-12">
+        <div class="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-search text-gray-400 text-3xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">No resources found</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">Try adjusting your filters or check back later for new content.</p>
+        {% if current_user.role == 'teacher' %}
+        <a href="{{ url_for('admin_resources') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+            Upload Resources
+        </a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}

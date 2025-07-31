@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funda App - Educational Resources</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .resource-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .resource-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        .source-badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+        }
+        .download-progress {
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">F</span>
+                    </div>
+                    <h1 class="text-xl font-bold text-white">Educational Resources</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button onclick="refreshResources()" class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>Refresh
+                    </button>
+                    <button onclick="goHome()" class="px-4 py-2 text-white hover:text-blue-200 transition-colors">
+                        <i class="fas fa-home mr-2"></i>Dashboard
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Stats Overview -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="textbook-count">1,247</div>
+                    <div class="text-white/70 text-sm">Textbooks</div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-file-alt text-white text-2xl"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="exam-count">892</div>
+                    <div class="text-white/70 text-sm">Past Exams</div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="guide-count">654</div>
+                    <div class="text-white/70 text-sm">Teacher Guides</div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-2">
+                        <i class="fas fa-graduation-cap text-white text-2xl"></i>
+                    </div>
+                    <div class="text-2xl font-bold text-white" id="abet-count">321</div>
+                    <div class="text-white/70 text-sm">ABET Materials</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="bg-white/10 backdrop-blur-md rounded-xl p-6 mb-8">
+            <h3 class="text-lg font-semibold text-white mb-4">Filter Resources</h3>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <label class="block text-white font-medium mb-2">Grade</label>
+                    <select id="grade-filter" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Grades</option>
+                        <option value="R">Grade R</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                        <option value="ABET">ABET</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Subject</label>
+                    <select id="subject-filter" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Subjects</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Sciences">Physical Sciences</option>
+                        <option value="Life Sciences">Life Sciences</option>
+                        <option value="English">English</option>
+                        <option value="Afrikaans">Afrikaans</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Life Orientation">Life Orientation</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Resource Type</label>
+                    <select id="type-filter" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Types</option>
+                        <option value="Textbook">Textbook</option>
+                        <option value="Past Exam">Past Exam</option>
+                        <option value="Teacher Guide">Teacher Guide</option>
+                        <option value="Worksheet">Worksheet</option>
+                        <option value="Study Guide">Study Guide</option>
+                        <option value="ABET Material">ABET Material</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Year</label>
+                    <select id="year-filter" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="flex justify-between items-center mt-6">
+                <button onclick="clearFilters()" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600">
+                    Clear Filters
+                </button>
+                <div class="text-white/70 text-sm">
+                    Last updated: <span id="last-updated">2024-01-30 14:30</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resources Grid -->
+        <div id="resources-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Resources will be populated here -->
+        </div>
+
+        <!-- Admin Upload Section (for authorized users) -->
+        <div id="admin-section" class="bg-white/10 backdrop-blur-md rounded-xl p-6 mt-8">
+            <h3 class="text-lg font-semibold text-white mb-4">
+                <i class="fas fa-shield-alt mr-2"></i>Admin: Upload Resources
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-white font-medium mb-2">Upload PDF</label>
+                    <input type="file" id="pdf-upload" accept=".pdf" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Resource Title</label>
+                    <input type="text" id="resource-title" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500" placeholder="Enter resource title">
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Grade</label>
+                    <select id="upload-grade" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Grade</option>
+                        <option value="R">Grade R</option>
+                        <option value="1">Grade 1</option>
+                        <option value="2">Grade 2</option>
+                        <option value="3">Grade 3</option>
+                        <option value="4">Grade 4</option>
+                        <option value="5">Grade 5</option>
+                        <option value="6">Grade 6</option>
+                        <option value="7">Grade 7</option>
+                        <option value="8">Grade 8</option>
+                        <option value="9">Grade 9</option>
+                        <option value="10">Grade 10</option>
+                        <option value="11">Grade 11</option>
+                        <option value="12">Grade 12</option>
+                        <option value="ABET">ABET</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Subject</label>
+                    <select id="upload-subject" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Subject</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physical Sciences">Physical Sciences</option>
+                        <option value="Life Sciences">Life Sciences</option>
+                        <option value="English">English</option>
+                        <option value="Afrikaans">Afrikaans</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Business Studies">Business Studies</option>
+                        <option value="Accounting">Accounting</option>
+                        <option value="Economics">Economics</option>
+                        <option value="Life Orientation">Life Orientation</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Resource Type</label>
+                    <select id="upload-type" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                        <option value="">Select Type</option>
+                        <option value="Textbook">Textbook</option>
+                        <option value="Past Exam">Past Exam</option>
+                        <option value="Teacher Guide">Teacher Guide</option>
+                        <option value="Worksheet">Worksheet</option>
+                        <option value="Study Guide">Study Guide</option>
+                        <option value="ABET Material">ABET Material</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-white font-medium mb-2">Year</label>
+                    <input type="number" id="upload-year" min="2020" max="2024" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500" placeholder="2024">
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <button onclick="uploadResource()" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-upload mr-2"></i>Upload Resource
+                </button>
+                <button onclick="triggerScrape()" class="ml-4 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                    <i class="fas fa-sync-alt mr-2"></i>Trigger Resource Scrape
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample resource data (in production, this would come from the backend)
+        let resourcesData = [
+            {
+                id: 1,
+                title: "Grade 10 Mathematics Textbook",
+                grade: "10",
+                subject: "Mathematics",
+                type: "Textbook",
+                year: "2024",
+                source: "Siyavula",
+                sourceUrl: "https://www.siyavula.com",
+                fileSize: "15.2 MB",
+                downloadUrl: "/resources/Grade10/Mathematics/Textbook/math_grade10_2024.pdf",
+                lastUpdated: "2024-01-25"
+            },
+            {
+                id: 2,
+                title: "Grade 12 Physical Sciences Past Paper",
+                grade: "12",
+                subject: "Physical Sciences",
+                type: "Past Exam",
+                year: "2023",
+                source: "DBE",
+                sourceUrl: "https://www.education.gov.za",
+                fileSize: "8.7 MB",
+                downloadUrl: "/resources/Grade12/PhysicalSciences/PastExam/physics_grade12_2023.pdf",
+                lastUpdated: "2024-01-20"
+            },
+            {
+                id: 3,
+                title: "Grade 7 Natural Sciences Teacher Guide",
+                grade: "7",
+                subject: "Life Sciences",
+                type: "Teacher Guide",
+                year: "2024",
+                source: "WCED",
+                sourceUrl: "https://wcedeportal.co.za",
+                fileSize: "12.4 MB",
+                downloadUrl: "/resources/Grade7/LifeSciences/TeacherGuide/science_grade7_guide_2024.pdf",
+                lastUpdated: "2024-01-22"
+            },
+            {
+                id: 4,
+                title: "ABET Level 2 Literacy Workbook",
+                grade: "ABET",
+                subject: "English",
+                type: "ABET Material",
+                year: "2024",
+                source: "Thutong",
+                sourceUrl: "http://www.thutong.doe.gov.za",
+                fileSize: "9.8 MB",
+                downloadUrl: "/resources/ABET/English/ABETMaterial/literacy_level2_2024.pdf",
+                lastUpdated: "2024-01-18"
+            },
+            {
+                id: 5,
+                title: "Grade 11 History Study Guide",
+                grade: "11",
+                subject: "History",
+                type: "Study Guide",
+                year: "2024",
+                source: "Siyavula",
+                sourceUrl: "https://www.siyavula.com",
+                fileSize: "18.3 MB",
+                downloadUrl: "/resources/Grade11/History/StudyGuide/history_grade11_2024.pdf",
+                lastUpdated: "2024-01-28"
+            },
+            {
+                id: 6,
+                title: "Grade 9 English Worksheet Collection",
+                grade: "9",
+                subject: "English",
+                type: "Worksheet",
+                year: "2024",
+                source: "DBE",
+                sourceUrl: "https://www.education.gov.za",
+                fileSize: "6.2 MB",
+                downloadUrl: "/resources/Grade9/English/Worksheet/english_grade9_worksheets_2024.pdf",
+                lastUpdated: "2024-01-26"
+            }
+        ];
+
+        let filteredResources = [...resourcesData];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            displayResources();
+            setupFilters();
+            updateStats();
+        });
+
+        function setupFilters() {
+            const filters = ['grade-filter', 'subject-filter', 'type-filter', 'year-filter'];
+            filters.forEach(filterId => {
+                document.getElementById(filterId).addEventListener('change', filterResources);
+            });
+        }
+
+        function filterResources() {
+            const gradeFilter = document.getElementById('grade-filter').value;
+            const subjectFilter = document.getElementById('subject-filter').value;
+            const typeFilter = document.getElementById('type-filter').value;
+            const yearFilter = document.getElementById('year-filter').value;
+
+            filteredResources = resourcesData.filter(resource => {
+                return (!gradeFilter || resource.grade === gradeFilter) &&
+                       (!subjectFilter || resource.subject === subjectFilter) &&
+                       (!typeFilter || resource.type === typeFilter) &&
+                       (!yearFilter || resource.year === yearFilter);
+            });
+
+            displayResources();
+        }
+
+        function displayResources() {
+            const resourcesGrid = document.getElementById('resources-grid');
+            resourcesGrid.innerHTML = '';
+
+            if (filteredResources.length === 0) {
+                resourcesGrid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-search text-white/50 text-6xl mb-4"></i>
+                        <h3 class="text-white text-xl font-bold mb-2">No resources found</h3>
+                        <p class="text-white/70">Try adjusting your filters or check back later for new resources.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredResources.forEach(resource => {
+                const resourceCard = document.createElement('div');
+                resourceCard.className = 'resource-card bg-white/10 rounded-xl p-6';
+
+                const sourceColors = {
+                    'Siyavula': 'bg-blue-500',
+                    'DBE': 'bg-green-500',
+                    'WCED': 'bg-purple-500',
+                    'Thutong': 'bg-orange-500'
+                };
+
+                resourceCard.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="flex-1">
+                            <h4 class="text-white font-bold text-lg mb-2">${resource.title}</h4>
+                            <div class="flex flex-wrap gap-2 mb-3">
+                                <span class="px-2 py-1 bg-blue-500/30 text-blue-200 text-xs rounded-full">Grade ${resource.grade}</span>
+                                <span class="px-2 py-1 bg-green-500/30 text-green-200 text-xs rounded-full">${resource.subject}</span>
+                                <span class="px-2 py-1 bg-purple-500/30 text-purple-200 text-xs rounded-full">${resource.type}</span>
+                            </div>
+                        </div>
+                        <span class="source-badge ${sourceColors[resource.source] || 'bg-gray-500'} text-white rounded-full">
+                            ${resource.source}
+                        </span>
+                    </div>
+                    
+                    <div class="text-white/70 text-sm mb-4">
+                        <div class="flex justify-between mb-1">
+                            <span>Year: ${resource.year}</span>
+                            <span>Size: ${resource.fileSize}</span>
+                        </div>
+                        <div class="text-xs">Updated: ${resource.lastUpdated}</div>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button onclick="downloadResource(${resource.id})" class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-download mr-2"></i>Download
+                        </button>
+                        <button onclick="previewResource(${resource.id})" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                `;
+
+                resourcesGrid.appendChild(resourceCard);
+            });
+        }
+
+        function updateStats() {
+            const textbooks = resourcesData.filter(r => r.type === 'Textbook').length;
+            const exams = resourcesData.filter(r => r.type === 'Past Exam').length;
+            const guides = resourcesData.filter(r => r.type === 'Teacher Guide').length;
+            const abet = resourcesData.filter(r => r.grade === 'ABET').length;
+
+            // Simulate larger numbers for demo
+            document.getElementById('textbook-count').textContent = (textbooks * 200 + 1247).toLocaleString();
+            document.getElementById('exam-count').textContent = (exams * 150 + 892).toLocaleString();
+            document.getElementById('guide-count').textContent = (guides * 100 + 654).toLocaleString();
+            document.getElementById('abet-count').textContent = (abet * 80 + 321).toLocaleString();
+        }
+
+        function clearFilters() {
+            document.getElementById('grade-filter').value = '';
+            document.getElementById('subject-filter').value = '';
+            document.getElementById('type-filter').value = '';
+            document.getElementById('year-filter').value = '';
+            filteredResources = [...resourcesData];
+            displayResources();
+        }
+
+        function downloadResource(resourceId) {
+            const resource = resourcesData.find(r => r.id === resourceId);
+            if (resource) {
+                // In production, this would trigger an actual download
+                alert(`📥 Downloading: ${resource.title}\n\nSource: ${resource.source}\nSize: ${resource.fileSize}\n\nIn a real implementation, this would download the PDF file.`);
+            }
+        }
+
+        function previewResource(resourceId) {
+            const resource = resourcesData.find(r => r.id === resourceId);
+            if (resource) {
+                alert(`👁️ Preview: ${resource.title}\n\nIn a real implementation, this would open a PDF preview modal or new tab.`);
+            }
+        }
+
+        function uploadResource() {
+            const title = document.getElementById('resource-title').value;
+            const grade = document.getElementById('upload-grade').value;
+            const subject = document.getElementById('upload-subject').value;
+            const type = document.getElementById('upload-type').value;
+            const year = document.getElementById('upload-year').value;
+            const file = document.getElementById('pdf-upload').files[0];
+
+            if (!title || !grade || !subject || !type || !year || !file) {
+                alert('Please fill in all fields and select a PDF file.');
+                return;
+            }
+
+            if (file.type !== 'application/pdf') {
+                alert('Please select a PDF file.');
+                return;
+            }
+
+            // Simulate upload progress
+            alert(`✅ Resource uploaded successfully!\n\nTitle: ${title}\nGrade: ${grade}\nSubject: ${subject}\nType: ${type}\nYear: ${year}\nFile: ${file.name}\n\nIn production, this would upload to the server and organize into the proper folder structure.`);
+
+            // Clear form
+            document.getElementById('resource-title').value = '';
+            document.getElementById('upload-grade').value = '';
+            document.getElementById('upload-subject').value = '';
+            document.getElementById('upload-type').value = '';
+            document.getElementById('upload-year').value = '';
+            document.getElementById('pdf-upload').value = '';
+        }
+
+        function triggerScrape() {
+            alert('🔄 Triggering resource scrape from:\n\n• Siyavula (https://www.siyavula.com)\n• DBE (https://www.education.gov.za)\n• WCED (https://wcedeportal.co.za)\n• Thutong (http://www.thutong.doe.gov.za)\n\nThis will fetch the latest textbooks, exam papers, teacher guides, and ABET materials.\n\nIn production, this would trigger the backend scraper service.');
+        }
+
+        function refreshResources() {
+            alert('🔄 Refreshing resources...\n\nIn production, this would fetch the latest resources from the database and update the display.');
+            // Simulate refresh
+            setTimeout(() => {
+                document.getElementById('last-updated').textContent = new Date().toLocaleString();
+            }, 1000);
+        }
+
+        function goHome() {
+            window.location.href = 'funda-ui-replica.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,345 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-blue-50 dark:bg-gray-900 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+                <a href="{{ url_for('games') }}" class="mr-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Games
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">🗣️ Language Matching Game</h1>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">Match English words with their translations in South African languages</p>
+            <!-- Language Pair Selector -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Language Pair:</label>
+                <select id="languagePairSelect" onchange="changeLanguagePair()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="en-zu">English → isiZulu</option>
+                    <option value="en-xh">English → isiXhosa</option>
+                    <option value="en-af">English → Afrikaans</option>
+                    <option value="en-st">English → Sesotho</option>
+                    <option value="en-tn">English → Setswana</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- English Words (Source) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4" id="sourceTitle">English Words</h2>
+                <div id="draggables" class="space-y-3">
+                    <!-- Words will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Target Language (Drop Zones) -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4" id="targetTitle">isiZulu Translations</h2>
+                <div id="droppables" class="space-y-3">
+                    <!-- Drop zones will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="text-center mb-6">
+            <button type="button" onclick="checkAnswers()" class="px-8 py-3 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-colors font-medium mr-4">
+                <i class="fas fa-check mr-2"></i><span id="checkButton">Check Answers</span>
+            </button>
+            <button type="button" onclick="resetGame()" class="px-8 py-3 bg-gray-600 text-white rounded-lg shadow-lg hover:bg-gray-700 transition-colors font-medium">
+                <i class="fas fa-redo mr-2"></i><span id="resetButton">Reset Game</span>
+            </button>
+        </div>
+
+        <!-- Results -->
+        <div id="result" class="text-center mb-8">
+            <p id="resultText" class="text-xl font-semibold text-gray-900 dark:text-white"></p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3">How to Play</h3>
+            <ul class="text-gray-600 dark:text-gray-300 space-y-2">
+                <li>• Drag the English words from the left panel</li>
+                <li>• Drop them onto the correct translation spaces on the right</li>
+                <li>• Each word has only one correct translation</li>
+                <li>• Click "Check Answers" to see your score</li>
+                <li>• Try different language pairs to expand your vocabulary!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Language data for different pairs
+    const languageData = {
+        'en-zu': {
+            sourceTitle: 'English Words',
+            targetTitle: 'isiZulu Translations',
+            pairs: [
+                { english: 'Mother', translation: 'umama', hint: 'Family member' },
+                { english: 'Father', translation: 'ubaba', hint: 'Family member' },
+                { english: 'Water', translation: 'amanzi', hint: 'Essential liquid' },
+                { english: 'Food', translation: 'ukudla', hint: 'What we eat' },
+                { english: 'School', translation: 'isikole', hint: 'Place of learning' },
+                { english: 'House', translation: 'indlu', hint: 'Where we live' },
+                { english: 'Book', translation: 'incwadi', hint: 'For reading' },
+                { english: 'Friend', translation: 'umngane', hint: 'Companion' }
+            ]
+        },
+        'en-xh': {
+            sourceTitle: 'English Words',
+            targetTitle: 'isiXhosa Translations',
+            pairs: [
+                { english: 'Mother', translation: 'umama', hint: 'Family member' },
+                { english: 'Father', translation: 'utata', hint: 'Family member' },
+                { english: 'Water', translation: 'amanzi', hint: 'Essential liquid' },
+                { english: 'Food', translation: 'ukutya', hint: 'What we eat' },
+                { english: 'School', translation: 'isikolo', hint: 'Place of learning' },
+                { english: 'House', translation: 'indlu', hint: 'Where we live' },
+                { english: 'Book', translation: 'incwadi', hint: 'For reading' },
+                { english: 'Friend', translation: 'umhlobo', hint: 'Companion' }
+            ]
+        },
+        'en-af': {
+            sourceTitle: 'English Words',
+            targetTitle: 'Afrikaans Translations',
+            pairs: [
+                { english: 'Mother', translation: 'moeder', hint: 'Family member' },
+                { english: 'Father', translation: 'vader', hint: 'Family member' },
+                { english: 'Water', translation: 'water', hint: 'Essential liquid' },
+                { english: 'Food', translation: 'kos', hint: 'What we eat' },
+                { english: 'School', translation: 'skool', hint: 'Place of learning' },
+                { english: 'House', translation: 'huis', hint: 'Where we live' },
+                { english: 'Book', translation: 'boek', hint: 'For reading' },
+                { english: 'Friend', translation: 'vriend', hint: 'Companion' }
+            ]
+        },
+        'en-st': {
+            sourceTitle: 'English Words',
+            targetTitle: 'Sesotho Translations',
+            pairs: [
+                { english: 'Mother', translation: 'mme', hint: 'Family member' },
+                { english: 'Father', translation: 'ntate', hint: 'Family member' },
+                { english: 'Water', translation: 'metsi', hint: 'Essential liquid' },
+                { english: 'Food', translation: 'dijo', hint: 'What we eat' },
+                { english: 'School', translation: 'sekolo', hint: 'Place of learning' },
+                { english: 'House', translation: 'ntlo', hint: 'Where we live' },
+                { english: 'Book', translation: 'buka', hint: 'For reading' },
+                { english: 'Friend', translation: 'motsoalle', hint: 'Companion' }
+            ]
+        },
+        'en-tn': {
+            sourceTitle: 'English Words',
+            targetTitle: 'Setswana Translations',
+            pairs: [
+                { english: 'Mother', translation: 'mme', hint: 'Family member' },
+                { english: 'Father', translation: 'rre', hint: 'Family member' },
+                { english: 'Water', translation: 'metsi', hint: 'Essential liquid' },
+                { english: 'Food', translation: 'dijo', hint: 'What we eat' },
+                { english: 'School', translation: 'sekolo', hint: 'Place of learning' },
+                { english: 'House', translation: 'ntlo', hint: 'Where we live' },
+                { english: 'Book', translation: 'buka', hint: 'For reading' },
+                { english: 'Friend', translation: 'tsala', hint: 'Companion' }
+            ]
+        }
+    };
+
+    let currentLanguagePair = 'en-zu';
+    let currentData = languageData[currentLanguagePair];
+    let gameCompleted = false;
+
+    function changeLanguagePair() {
+        currentLanguagePair = document.getElementById('languagePairSelect').value;
+        currentData = languageData[currentLanguagePair];
+        initializeGame();
+    }
+
+    function initializeGame() {
+        // Update titles
+        document.getElementById('sourceTitle').textContent = currentData.sourceTitle;
+        document.getElementById('targetTitle').textContent = currentData.targetTitle;
+
+        // Clear previous game
+        document.getElementById('draggables').innerHTML = '';
+        document.getElementById('droppables').innerHTML = '';
+        document.getElementById('resultText').textContent = '';
+
+        // Create draggable items (English words)
+        const draggablesContainer = document.getElementById('draggables');
+        currentData.pairs.forEach((pair, index) => {
+            const draggableDiv = document.createElement('div');
+            draggableDiv.className = 'draggable p-3 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-700 shadow-md rounded-lg cursor-grab hover:shadow-lg transition-all';
+            draggableDiv.draggable = true;
+            draggableDiv.dataset.match = pair.translation;
+            draggableDiv.dataset.english = pair.english;
+            draggableDiv.innerHTML = `<span class="font-medium text-gray-800 dark:text-white">${pair.english}</span>`;
+            draggablesContainer.appendChild(draggableDiv);
+        });
+
+        // Create droppable areas (translation spaces) - randomize order
+        const shuffledPairs = [...currentData.pairs].sort(() => Math.random() - 0.5);
+        const droppablesContainer = document.getElementById('droppables');
+        shuffledPairs.forEach((pair, index) => {
+            const droppableDiv = document.createElement('div');
+            droppableDiv.className = 'droppable p-4 bg-gray-50 dark:bg-gray-700 shadow-md rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 transition-colors min-h-16 flex items-center';
+            droppableDiv.dataset.value = pair.translation;
+            droppableDiv.innerHTML = `
+                <div class="w-full flex justify-between items-center">
+                    <div>
+                        <div class="text-gray-500 dark:text-gray-400 text-sm mb-1">${pair.hint}</div>
+                        <div class="text-gray-700 dark:text-gray-300">____ (${pair.translation})</div>
+                    </div>
+                    <button type="button" onclick="playAudio('${pair.translation}')" class="ml-2 px-2 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 text-sm" title="Listen to pronunciation">
+                        🔊
+                    </button>
+                </div>
+            `;
+            droppablesContainer.appendChild(droppableDiv);
+        });
+
+        // Initialize drag and drop
+        initializeDragAndDrop();
+        gameCompleted = false;
+    }
+
+    function initializeDragAndDrop() {
+        const draggables = document.querySelectorAll('.draggable');
+        const droppables = document.querySelectorAll('.droppable');
+        let draggedElement = null;
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', (e) => {
+                draggedElement = draggable;
+                draggable.style.opacity = '0.5';
+                e.dataTransfer.effectAllowed = 'move';
+            });
+
+            draggable.addEventListener('dragend', (e) => {
+                draggable.style.opacity = '1';
+            });
+        });
+
+        droppables.forEach(droppable => {
+            droppable.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+                droppable.classList.add('ring-4', 'ring-blue-300', 'dark:ring-blue-500');
+            });
+
+            droppable.addEventListener('dragleave', (e) => {
+                droppable.classList.remove('ring-4', 'ring-blue-300', 'dark:ring-blue-500');
+            });
+
+            droppable.addEventListener('drop', (e) => {
+                e.preventDefault();
+                droppable.classList.remove('ring-4', 'ring-blue-300', 'dark:ring-blue-500');
+                
+                if (draggedElement) {
+                    // Clear any existing dropped content
+                    const existingDropped = droppable.querySelector('.dropped-word');
+                    if (existingDropped) {
+                        existingDropped.remove();
+                    }
+
+                    // Add the dropped word
+                    const droppedElement = document.createElement('div');
+                    droppedElement.className = 'dropped-word mt-2 p-2 bg-blue-100 dark:bg-blue-800 rounded-lg font-medium text-blue-800 dark:text-blue-200';
+                    droppedElement.textContent = draggedElement.dataset.english;
+                    droppable.appendChild(droppedElement);
+                    droppable.setAttribute('data-dropped', draggedElement.dataset.match);
+                    
+                    // Play audio when word is dropped
+                    playAudio(draggedElement.dataset.match);
+                }
+            });
+        });
+    }
+
+    function checkAnswers() {
+        const droppables = document.querySelectorAll('.droppable');
+        let score = 0;
+        
+        droppables.forEach(droppable => {
+            const correctTranslation = droppable.dataset.value;
+            const droppedTranslation = droppable.dataset.dropped;
+            
+            if (correctTranslation === droppedTranslation) {
+                score++;
+                droppable.classList.remove('bg-red-100', 'dark:bg-red-800', 'border-red-300', 'dark:border-red-600');
+                droppable.classList.add('bg-green-100', 'dark:bg-green-800', 'border-green-300', 'dark:border-green-600');
+            } else {
+                droppable.classList.remove('bg-green-100', 'dark:bg-green-800', 'border-green-300', 'dark:border-green-600');
+                droppable.classList.add('bg-red-100', 'dark:bg-red-800', 'border-red-300', 'dark:border-red-600');
+            }
+        });
+        
+        const totalWords = currentData.pairs.length;
+        document.getElementById('resultText').textContent = `✅ You matched ${score} of ${totalWords} words correctly!`;
+        
+        if (score === totalWords) {
+            document.getElementById('resultText').className = 'text-xl font-semibold text-green-600 dark:text-green-400';
+            setTimeout(() => {
+                alert('🎉 Perfect! You matched all words correctly! / Kahle kakhulu! / Uitstekend!');
+            }, 500);
+        } else {
+            document.getElementById('resultText').className = 'text-xl font-semibold text-orange-600 dark:text-orange-400';
+        }
+        
+        gameCompleted = true;
+    }
+
+    function resetGame() {
+        const droppables = document.querySelectorAll('.droppable');
+        
+        droppables.forEach(droppable => {
+            const droppedElement = droppable.querySelector('.dropped-word');
+            if (droppedElement) {
+                droppedElement.remove();
+            }
+            droppable.removeAttribute('data-dropped');
+            droppable.classList.remove(
+                'bg-green-100', 'dark:bg-green-800', 'border-green-300', 'dark:border-green-600',
+                'bg-red-100', 'dark:bg-red-800', 'border-red-300', 'dark:border-red-600'
+            );
+        });
+        
+        document.getElementById('resultText').textContent = '';
+        gameCompleted = false;
+    }
+
+    // Audio pronunciation function using Web Speech API
+    function playAudio(word, language = 'zu-ZA') {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(word);
+            
+            // Set language based on current language pair
+            const currentPair = document.getElementById('languagePairSelect').value;
+            switch(currentPair) {
+                case 'en-zu': utterance.lang = 'zu-ZA'; break;
+                case 'en-xh': utterance.lang = 'xh-ZA'; break;
+                case 'en-af': utterance.lang = 'af-ZA'; break;
+                case 'en-st': utterance.lang = 'st-ZA'; break;
+                case 'en-tn': utterance.lang = 'tn-ZA'; break;
+                default: utterance.lang = 'zu-ZA';
+            }
+            
+            utterance.rate = 0.8;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            speechSynthesis.speak(utterance);
+        } else {
+            console.log('Speech synthesis not supported');
+        }
+    }
+
+    // Initialize the game when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeGame();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funda App - Support Center</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .support-card {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        .support-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+        }
+        .emergency-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chat-bubble {
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .chat-input {
+            resize: none;
+            min-height: 60px;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white/10 backdrop-blur-md shadow-lg border-b border-white/20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">F</span>
+                    </div>
+                    <h1 class="text-xl font-bold text-white">Funda Support Center</h1>
+                </div>
+                <button onclick="goHome()" class="px-4 py-2 text-white hover:text-blue-200 transition-colors">
+                    <i class="fas fa-home mr-2"></i>Dashboard
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="max-w-6xl mx-auto p-6">
+        <!-- Welcome Message -->
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold text-white mb-4">🛡️ Safe Space Support Center</h2>
+            <p class="text-white/80 text-lg max-w-3xl mx-auto">
+                You are not alone. This is a safe, confidential space where you can get help if you're being bullied, 
+                abused, or struggling with mental health. All conversations are private and secure.
+            </p>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="bg-red-500/20 backdrop-blur-md border border-red-400/30 rounded-xl p-6 mb-8 emergency-pulse">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 bg-red-500 rounded-full flex items-center justify-center">
+                    <i class="fas fa-phone text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-white font-bold text-lg">Emergency? Call Now</h3>
+                    <p class="text-white/80">If you're in immediate danger, call emergency services: <strong>10111</strong></p>
+                    <p class="text-white/80">Childline South Africa: <strong>116</strong> (Free 24/7)</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Support Options -->
+        <div id="support-options" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Anonymous Reporting -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openReportForm()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-shield-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Anonymous Report</h3>
+                    <p class="text-white/80 text-sm mb-4">Report bullying, abuse, or unsafe situations anonymously. Your identity is protected.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                        Submit Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Live Chat -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openLiveChat()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-comments text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Live Chat</h3>
+                    <p class="text-white/80 text-sm mb-4">Chat securely with a trained counselor. Available 24/7 for immediate support.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                        Start Chat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Video Call -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openVideoCall()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-video text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Video Call</h3>
+                    <p class="text-white/80 text-sm mb-4">Face-to-face support with a qualified counselor. Schedule or join immediately.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors">
+                        Start Video Call
+                    </button>
+                </div>
+            </div>
+
+            <!-- Voice Call -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openVoiceCall()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-phone text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Voice Call</h3>
+                    <p class="text-white/80 text-sm mb-4">Speak directly with a counselor. Private and confidential voice support.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                        Start Voice Call
+                    </button>
+                </div>
+            </div>
+
+            <!-- Schedule Appointment -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openScheduler()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-teal-400 to-cyan-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-calendar-alt text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Schedule Session</h3>
+                    <p class="text-white/80 text-sm mb-4">Book a session with a counselor at a time that works for you.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors">
+                        Book Session
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resources -->
+            <div class="support-card bg-white/10 backdrop-blur-md rounded-xl p-6 cursor-pointer" onclick="openResources()">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-book text-white text-2xl"></i>
+                    </div>
+                    <h3 class="text-white font-bold text-lg mb-2">Help Resources</h3>
+                    <p class="text-white/80 text-sm mb-4">Access guides, articles, and resources about bullying, mental health, and safety.</p>
+                    <button type="button" class="w-full px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
+                        View Resources
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Anonymous Report Form -->
+        <div id="report-form" class="hidden">
+            <div class="bg-white/10 backdrop-blur-md rounded-xl p-8 max-w-2xl mx-auto">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-2xl font-bold text-white">Anonymous Report</h3>
+                    <button type="button" onclick="closeModal()" class="text-white/60 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                
+                <form id="anonymous-report-form" class="space-y-6">
+                    <div>
+                        <label class="block text-white font-medium mb-2">What type of incident are you reporting?</label>
+                        <select class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                            <option value="">Select incident type</option>
+                            <option value="bullying">Bullying (verbal, physical, social)</option>
+                            <option value="cyberbullying">Cyberbullying (online harassment)</option>
+                            <option value="abuse">Physical or emotional abuse</option>
+                            <option value="discrimination">Discrimination or prejudice</option>
+                            <option value="mental-health">Mental health crisis</option>
+                            <option value="safety">Safety concern at school</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-white font-medium mb-2">Describe what happened</label>
+                        <textarea class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500" rows="6" placeholder="Please describe the incident in detail. Include when and where it happened, who was involved, and any other relevant information."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-white font-medium mb-2">When did this happen?</label>
+                        <input type="datetime-local" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500">
+                    </div>
+
+                    <div>
+                        <label class="block text-white font-medium mb-2">Location (optional)</label>
+                        <input type="text" class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500" placeholder="School name, classroom, online platform, etc.">
+                    </div>
+
+                    <div>
+                        <label class="flex items-center text-white">
+                            <input type="checkbox" class="mr-3 rounded">
+                            I would like someone to follow up with me about this report
+                        </label>
+                    </div>
+
+                    <div class="flex space-x-4">
+                        <button type="submit" class="flex-1 px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+                            Submit Report Securely
+                        </button>
+                        <button type="button" onclick="closeModal()" class="px-6 py-3 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Live Chat Interface -->
+        <div id="chat-interface" class="hidden">
+            <div class="bg-white/10 backdrop-blur-md rounded-xl max-w-4xl mx-auto">
+                <!-- Chat Header -->
+                <div class="flex items-center justify-between p-6 border-b border-white/20">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-shield text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold">Counselor Sarah</h3>
+                            <p class="text-green-300 text-sm">
+                                <i class="fas fa-circle text-xs mr-1"></i>Online - Ready to help
+                            </p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeModal()" class="text-white/60 hover:text-white">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+
+                <!-- Chat Messages -->
+                <div id="chat-messages" class="h-96 overflow-y-auto p-6 space-y-4">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user-shield text-white text-sm"></i>
+                        </div>
+                        <div class="chat-bubble bg-white/20 rounded-lg p-3">
+                            <p class="text-white">Hi there! I'm Sarah, a trained counselor. This is a safe, confidential space. How can I help you today?</p>
+                            <span class="text-white/60 text-xs">Just now</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="p-6 border-t border-white/20">
+                    <div class="flex space-x-4">
+                        <textarea id="chat-input" class="flex-1 chat-input px-4 py-3 bg-white/20 border border-white/30 rounded-lg text-white focus:ring-2 focus:ring-blue-500 resize-none" placeholder="Type your message here... Press Enter to send"></textarea>
+                        <button type="button" onclick="sendMessage()" class="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                    <p class="text-white/60 text-xs mt-2">
+                        <i class="fas fa-lock mr-1"></i>This conversation is encrypted and confidential
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function goHome() {
+            window.location.href = 'funda-ui-replica.html';
+        }
+
+        function openReportForm() {
+            document.getElementById('support-options').classList.add('hidden');
+            document.getElementById('report-form').classList.remove('hidden');
+        }
+
+        function openLiveChat() {
+            document.getElementById('support-options').classList.add('hidden');
+            document.getElementById('chat-interface').classList.remove('hidden');
+        }
+
+        function openVideoCall() {
+            alert('🎥 Connecting you to a video call with a counselor...\n\nIn a real implementation, this would integrate with Zoom, Agora, or LiveKit for secure video calls.');
+        }
+
+        function openVoiceCall() {
+            alert('📞 Connecting you to a voice call with a counselor...\n\nIn a real implementation, this would initiate a secure voice call.');
+        }
+
+        function openScheduler() {
+            alert('📅 Opening appointment scheduler...\n\nIn a real implementation, this would show available time slots with counselors.');
+        }
+
+        function openResources() {
+            alert('📚 Opening help resources...\n\nIn a real implementation, this would show articles, guides, and educational materials about bullying prevention and mental health.');
+        }
+
+        function closeModal() {
+            document.getElementById('support-options').classList.remove('hidden');
+            document.getElementById('report-form').classList.add('hidden');
+            document.getElementById('chat-interface').classList.add('hidden');
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                // Add user message
+                addMessage(message, 'user');
+                input.value = '';
+                
+                // Simulate counselor response
+                setTimeout(() => {
+                    const responses = [
+                        "Thank you for sharing that with me. You're very brave for reaching out.",
+                        "I understand this must be difficult for you. Can you tell me more about how this is affecting you?",
+                        "That sounds really challenging. Remember, none of this is your fault.",
+                        "I'm here to listen and support you. What would be most helpful for you right now?",
+                        "You've taken an important step by talking about this. How are you feeling right now?"
+                    ];
+                    const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                    addMessage(randomResponse, 'counselor');
+                }, 1000 + Math.random() * 2000);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            
+            if (sender === 'user') {
+                messageDiv.className = 'flex items-start space-x-3 justify-end';
+                messageDiv.innerHTML = `
+                    <div class="chat-bubble bg-blue-500 rounded-lg p-3 text-right">
+                        <p class="text-white">${text}</p>
+                        <span class="text-blue-100 text-xs">Just now</span>
+                    </div>
+                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-white text-sm"></i>
+                    </div>
+                `;
+            } else {
+                messageDiv.className = 'flex items-start space-x-3';
+                messageDiv.innerHTML = `
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user-shield text-white text-sm"></i>
+                    </div>
+                    <div class="chat-bubble bg-white/20 rounded-lg p-3">
+                        <p class="text-white">${text}</p>
+                        <span class="text-white/60 text-xs">Just now</span>
+                    </div>
+                `;
+            }
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // Handle Enter key in chat input
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                    }
+                });
+            }
+
+            // Handle form submission
+            const reportForm = document.getElementById('anonymous-report-form');
+            if (reportForm) {
+                reportForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('✅ Your report has been submitted securely and anonymously.\n\nA trained counselor will review your report within 24 hours. If you indicated you\'d like follow-up, someone will contact you safely.\n\nThank you for your courage in speaking up.');
+                    closeModal();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

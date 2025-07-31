@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="bg-green-50 dark:bg-gray-900 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="flex items-center justify-center mb-4">
+                <a href="{{ url_for('games') }}" class="mr-4 px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Games
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">🌍 Geography Matching Game</h1>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-6">Match the correct geographic term with its definition. Supports multiple SA languages.</p>
+            
+            <!-- Language Selector -->
+            <div class="mb-6">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Select Language / Kies Taal / Khetha Ulimi:</label>
+                <select id="languageSelect" onchange="changeLanguage()" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <option value="en">English</option>
+                    <option value="af">Afrikaans</option>
+                    <option value="zu">isiZulu</option>
+                    <option value="xh">isiXhosa</option>
+                    <option value="st">Sesotho</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <!-- Terms to drag -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4" id="termsTitle">Terms</h2>
+                <div id="terms" class="space-y-3">
+                    <div class="p-3 bg-gradient-to-r from-green-100 to-green-200 dark:from-green-800 dark:to-green-700 shadow-md rounded-lg cursor-grab hover:shadow-lg transition-shadow draggable" 
+                         draggable="true" id="term-mountain" data-term="Mountain">
+                        <span class="font-medium text-gray-800 dark:text-white" id="term-mountain-text">Mountain</span>
+                    </div>
+                    <div class="p-3 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-800 dark:to-blue-700 shadow-md rounded-lg cursor-grab hover:shadow-lg transition-shadow draggable" 
+                         draggable="true" id="term-river" data-term="River">
+                        <span class="font-medium text-gray-800 dark:text-white" id="term-river-text">River</span>
+                    </div>
+                    <div class="p-3 bg-gradient-to-r from-yellow-100 to-yellow-200 dark:from-yellow-800 dark:to-yellow-700 shadow-md rounded-lg cursor-grab hover:shadow-lg transition-shadow draggable" 
+                         draggable="true" id="term-desert" data-term="Desert">
+                        <span class="font-medium text-gray-800 dark:text-white" id="term-desert-text">Desert</span>
+                    </div>
+                    <div class="p-3 bg-gradient-to-r from-purple-100 to-purple-200 dark:from-purple-800 dark:to-purple-700 shadow-md rounded-lg cursor-grab hover:shadow-lg transition-shadow draggable" 
+                         draggable="true" id="term-plateau" data-term="Plateau">
+                        <span class="font-medium text-gray-800 dark:text-white" id="term-plateau-text">Plateau</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Drop areas -->
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4" id="definitionsTitle">Definitions</h2>
+                <div id="definitions" class="space-y-4">
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 shadow-md rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 droppable hover:border-green-400 dark:hover:border-green-500 transition-colors" 
+                         data-term="Mountain">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🏔️</span>
+                            <span class="text-gray-700 dark:text-gray-300" id="def-mountain">A high natural elevation of the earth's surface.</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 shadow-md rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 droppable hover:border-blue-400 dark:hover:border-blue-500 transition-colors" 
+                         data-term="River">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🌊</span>
+                            <span class="text-gray-700 dark:text-gray-300" id="def-river">A large stream of water flowing across land.</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 shadow-md rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 droppable hover:border-yellow-400 dark:hover:border-yellow-500 transition-colors" 
+                         data-term="Desert">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🏜️</span>
+                            <span class="text-gray-700 dark:text-gray-300" id="def-desert">A dry, barren area with little rainfall.</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-gray-50 dark:bg-gray-700 shadow-md rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-600 droppable hover:border-purple-400 dark:hover:border-purple-500 transition-colors" 
+                         data-term="Plateau">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🏞️</span>
+                            <span class="text-gray-700 dark:text-gray-300" id="def-plateau">A flat elevated landform.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Controls -->
+        <div class="text-center mb-6">
+            <button onclick="checkAnswers()" class="px-8 py-3 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 transition-colors font-medium mr-4">
+                <i class="fas fa-check mr-2"></i><span id="checkButton">Check Answers</span>
+            </button>
+            <button onclick="resetGame()" class="px-8 py-3 bg-gray-600 text-white rounded-lg shadow-lg hover:bg-gray-700 transition-colors font-medium">
+                <i class="fas fa-redo mr-2"></i><span id="resetButton">Reset Game</span>
+            </button>
+        </div>
+
+        <!-- Results -->
+        <div id="result" class="text-center">
+            <p id="resultText" class="text-xl font-semibold text-gray-900 dark:text-white"></p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-8">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3" id="instructionsTitle">How to Play</h3>
+            <ul class="text-gray-600 dark:text-gray-300 space-y-2" id="instructionsList">
+                <li>• Drag the geographic terms from the left panel</li>
+                <li>• Drop them onto the matching definitions on the right</li>
+                <li>• Click "Check Answers" to see your score</li>
+                <li>• Try to get all 4 correct!</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Multilingual content
+    const translations = {
+        en: {
+            title: "Geography Matching Game",
+            subtitle: "Match the correct geographic term with its definition. Supports multiple SA languages.",
+            termsTitle: "Terms",
+            definitionsTitle: "Definitions",
+            checkButton: "Check Answers",
+            resetButton: "Reset Game",
+            instructionsTitle: "How to Play",
+            instructions: [
+                "• Drag the geographic terms from the left panel",
+                "• Drop them onto the matching definitions on the right",
+                "• Click \"Check Answers\" to see your score",
+                "• Try to get all 4 correct!"
+            ],
+            terms: {
+                Mountain: "Mountain",
+                River: "River", 
+                Desert: "Desert",
+                Plateau: "Plateau"
+            },
+            definitions: {
+                Mountain: "A high natural elevation of the earth's surface.",
+                River: "A large stream of water flowing across land.",
+                Desert: "A dry, barren area with little rainfall.",
+                Plateau: "A flat elevated landform."
+            },
+            result: "You got {score} out of 4 correct!"
+        },
+        af: {
+            title: "Geografie Pas-by Spel",
+            subtitle: "Pas die korrekte geografiese term by sy definisie. Ondersteun verskeie SA tale.",
+            termsTitle: "Terme",
+            definitionsTitle: "Definisies",
+            checkButton: "Kontroleer Antwoorde",
+            resetButton: "Herstel Spel",
+            instructionsTitle: "Hoe om te Speel",
+            instructions: [
+                "• Sleep die geografiese terme van die linker paneel",
+                "• Laat val hulle op die ooreenstemmende definisies aan die regterkant",
+                "• Klik \"Kontroleer Antwoorde\" om jou telling te sien",
+                "• Probeer om al 4 korrek te kry!"
+            ],
+            terms: {
+                Mountain: "Berg",
+                River: "Rivier",
+                Desert: "Woestyn", 
+                Plateau: "Plato"
+            },
+            definitions: {
+                Mountain: "'n Hoë natuurlike verhewendheid van die aarde se oppervlak.",
+                River: "'n Groot stroom water wat oor land vloei.",
+                Desert: "'n Droë, dorre gebied met min reënval.",
+                Plateau: "'n Plat verhoogde landvorm."
+            },
+            result: "Jy het {score} uit 4 korrek gekry!"
+        },
+        zu: {
+            title: "Umdlalo Wokufanisa Ijografi",
+            subtitle: "Fanisa igama elijwayelekile lejografi nencazelo yalo. Isekela izilimi eziningi zaseNingizimu Afrika.",
+            termsTitle: "Amagama",
+            definitionsTitle: "Izincazelo",
+            checkButton: "Hlola Izimpendulo",
+            resetButton: "Qala Kabusha",
+            instructionsTitle: "Indlela Yokudlala",
+            instructions: [
+                "• Hudula amagama ejografi ephaketheni lasekhohlo",
+                "• Awalahlele ezincazelweni ezifanayo ngakwesokunene",
+                "• Chofoza \"Hlola Izimpendulo\" ukuze ubone amaphuzu akho",
+                "• Zama ukuthola konke oku-4 kulungile!"
+            ],
+            terms: {
+                Mountain: "Intaba",
+                River: "Umfula",
+                Desert: "Ugwadule",
+                Plateau: "Iplato"
+            },
+            definitions: {
+                Mountain: "Indawo ephakeme yemvelo yomhlaba.",
+                River: "Umfudlana omkhulu wamanzi ogeleza emhlabeni.",
+                Desert: "Indawo eyomile, engenasilutho enamvula encane.",
+                Plateau: "Indawo eyisicaba esiphakeme."
+            },
+            result: "Uthole {score} kwezi-4 ezilungile!"
+        },
+        xh: {
+            title: "Umdlalo Wokuthelekisa Ijografi",
+            subtitle: "Thelekisa igama elijografi elifanelekileyo nencazelo yalo. Ixhasa iilwimi ezininzi zaseMzantsi Afrika.",
+            termsTitle: "Amagama",
+            definitionsTitle: "Iinkcazo",
+            checkButton: "Jonga Iimpendulo",
+            resetButton: "Phinda Uqale",
+            instructionsTitle: "Indlela Yokudlala",
+            instructions: [
+                "• Tsala amagama ejografi kwiphaneli yasekhohlo",
+                "• Awalahlele kwiinkcazo ezifanayo ngasekunene",
+                "• Cofa \"Jonga Iimpendulo\" ukuze ubone amanqaku akho",
+                "• Zama ukufumana zonke ezi-4 zilungile!"
+            ],
+            terms: {
+                Mountain: "Intaba",
+                River: "Umlambo",
+                Desert: "Intlango",
+                Plateau: "Iplato"
+            },
+            definitions: {
+                Mountain: "Indawo ephakeme yendalo yomhlaba.",
+                River: "Umjelo omkhulu wamanzi ohamba emhlabeni.",
+                Desert: "Indawo eyomileyo, engenasilutho enemvula encinci.",
+                Plateau: "Indawo esicaba esiphakeme."
+            },
+            result: "Ufumene {score} kwezo-4 zilungileyo!"
+        },
+        st: {
+            title: "Papali ya ho Bapisa Tikologo",
+            subtitle: "Bapisa lentswe le nepahetseng la tikologo le tlhaloso ya lona. E tshehla dipuo tse ngata tsa Afrika Borwa.",
+            termsTitle: "Mantswe",
+            definitionsTitle: "Ditlhaloso",
+            checkButton: "Hlahloba Dikarabo",
+            resetButton: "Qala Hape",
+            instructionsTitle: "Mokhoa wa ho Bapala",
+            instructions: [
+                "• Hula mantswe a tikologo ho tswa phaneleng ya hale",
+                "• A lahle hodima ditlhaloso tse tsamaellanang ka ho le letona",
+                "• Tobetsa \"Hlahloba Dikarabo\" ho bona dimpho tsa hao",
+                "• Leka ho fumana tsohle tse 4 di nepahala!"
+            ],
+            terms: {
+                Mountain: "Thaba",
+                River: "Noka",
+                Desert: "Sekgahla",
+                Plateau: "Plateau"
+            },
+            definitions: {
+                Mountain: "Sebaka se phahameng sa tlhaho sa bokahodimo ba lefatshe.",
+                River: "Phallo e kgolo ya metsi e elang lefatsheng.",
+                Desert: "Sebaka se omileng, se se nang letho se nang le pula e nyenyane.",
+                Plateau: "Sebaka se bataletseng se phahameng."
+            },
+            result: "O fumane {score} ho tse 4 tse nepahetseng!"
+        }
+    };
+
+    let currentLanguage = 'en';
+    let gameCompleted = false;
+
+    // Drag and drop functionality
+    const draggables = document.querySelectorAll('.draggable');
+    const droppables = document.querySelectorAll('.droppable');
+
+    function initializeDragAndDrop() {
+        draggables.forEach(drag => {
+            drag.addEventListener('dragstart', e => {
+                e.dataTransfer.setData('text/plain', drag.dataset.term);
+                drag.style.opacity = '0.5';
+            });
+            
+            drag.addEventListener('dragend', e => {
+                drag.style.opacity = '1';
+            });
+        });
+
+        droppables.forEach(drop => {
+            drop.addEventListener('dragover', e => {
+                e.preventDefault();
+                drop.classList.add('ring-4', 'ring-green-300', 'dark:ring-green-500');
+            });
+            
+            drop.addEventListener('dragleave', () => {
+                drop.classList.remove('ring-4', 'ring-green-300', 'dark:ring-green-500');
+            });
+            
+            drop.addEventListener('drop', e => {
+                e.preventDefault();
+                drop.classList.remove('ring-4', 'ring-green-300', 'dark:ring-green-500');
+                const draggedTerm = e.dataTransfer.getData('text/plain');
+                
+                // Clear any existing dropped content
+                const existingDropped = drop.querySelector('.dropped-term');
+                if (existingDropped) {
+                    existingDropped.remove();
+                }
+                
+                // Add the dropped term
+                const droppedElement = document.createElement('div');
+                droppedElement.className = 'dropped-term mt-2 p-2 bg-blue-100 dark:bg-blue-800 rounded-lg font-medium text-blue-800 dark:text-blue-200';
+                droppedElement.textContent = translations[currentLanguage].terms[draggedTerm];
+                drop.appendChild(droppedElement);
+                drop.setAttribute('data-dropped', draggedTerm);
+            });
+        });
+    }
+
+    function changeLanguage() {
+        currentLanguage = document.getElementById('languageSelect').value;
+        updateLanguage();
+    }
+
+    function updateLanguage() {
+        const lang = translations[currentLanguage];
+        
+        // Update terms
+        Object.keys(lang.terms).forEach(term => {
+            const element = document.getElementById(`term-${term.toLowerCase()}-text`);
+            if (element) element.textContent = lang.terms[term];
+        });
+        
+        // Update definitions
+        Object.keys(lang.definitions).forEach(term => {
+            const element = document.getElementById(`def-${term.toLowerCase()}`);
+            if (element) element.textContent = lang.definitions[term];
+        });
+        
+        // Update UI elements
+        document.getElementById('termsTitle').textContent = lang.termsTitle;
+        document.getElementById('definitionsTitle').textContent = lang.definitionsTitle;
+        document.getElementById('checkButton').textContent = lang.checkButton;
+        document.getElementById('resetButton').textContent = lang.resetButton;
+        document.getElementById('instructionsTitle').textContent = lang.instructionsTitle;
+        
+        // Update instructions
+        const instructionsList = document.getElementById('instructionsList');
+        instructionsList.innerHTML = lang.instructions.map(instruction => `<li>${instruction}</li>`).join('');
+    }
+
+    function checkAnswers() {
+        let score = 0;
+        droppables.forEach(drop => {
+            const correctTerm = drop.dataset.term;
+            const droppedTerm = drop.dataset.dropped;
+            
+            if (correctTerm === droppedTerm) {
+                score++;
+                drop.classList.remove('bg-red-100', 'dark:bg-red-800');
+                drop.classList.add('bg-green-100', 'dark:bg-green-800');
+            } else {
+                drop.classList.remove('bg-green-100', 'dark:bg-green-800');
+                drop.classList.add('bg-red-100', 'dark:bg-red-800');
+            }
+        });
+        
+        const resultText = translations[currentLanguage].result.replace('{score}', score);
+        document.getElementById('resultText').textContent = resultText;
+        
+        if (score === 4) {
+            document.getElementById('resultText').className = 'text-xl font-semibold text-green-600 dark:text-green-400';
+            // Add celebration effect
+            setTimeout(() => {
+                alert('🎉 Congratulations! Perfect score! / Gefeliciteerd! Perfekte telling! / Siyakubongela! Amaphuzu apheleleyo!');
+            }, 500);
+        } else {
+            document.getElementById('resultText').className = 'text-xl font-semibold text-orange-600 dark:text-orange-400';
+        }
+        
+        gameCompleted = true;
+    }
+
+    function resetGame() {
+        // Clear all dropped items
+        droppables.forEach(drop => {
+            const droppedElement = drop.querySelector('.dropped-term');
+            if (droppedElement) {
+                droppedElement.remove();
+            }
+            drop.removeAttribute('data-dropped');
+            drop.classList.remove('bg-green-100', 'dark:bg-green-800', 'bg-red-100', 'dark:bg-red-800');
+        });
+        
+        // Clear result
+        document.getElementById('resultText').textContent = '';
+        gameCompleted = false;
+    }
+
+    // Initialize the game
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeDragAndDrop();
+        updateLanguage();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz - Funda Education</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .quiz-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .question-type-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .question-type-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        .question-type-card.selected {
+            border-color: #3b82f6;
+            background-color: #eff6ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">F</span>
+                    </div>
+                    <h1 class="text-xl font-semibold text-gray-900">Quiz Builder</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Welcome, {{ current_user.full_name }}</span>
+                    <a href="{{ url_for('practice_zone') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Practice Zone
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- Quiz Creation Form -->
+        <div class="quiz-card rounded-xl shadow-xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-plus-circle text-3xl text-blue-600 mr-4"></i>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Create New Quiz</h2>
+                    <p class="text-gray-600">Build comprehensive quizzes with multiple question types</p>
+                </div>
+            </div>
+
+            <form method="POST" class="space-y-6">
+                <!-- Quiz Basic Info -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Quiz Title -->
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Quiz Title *</label>
+                        <input type="text" name="title" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Enter quiz title...">
+                    </div>
+
+                    <!-- Grade -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grade *</label>
+                        <select name="grade" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Grade</option>
+                            <option value="Grade R">Grade R</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                            <option value="ABET Level 1">ABET Level 1</option>
+                            <option value="ABET Level 2">ABET Level 2</option>
+                            <option value="ABET Level 3">ABET Level 3</option>
+                            <option value="ABET Level 4">ABET Level 4</option>
+                        </select>
+                    </div>
+
+                    <!-- Subject -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                        <select name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physical Sciences">Physical Sciences</option>
+                            <option value="Life Sciences">Life Sciences</option>
+                            <option value="English">English</option>
+                            <option value="Afrikaans">Afrikaans</option>
+                            <option value="isiZulu">isiZulu</option>
+                            <option value="isiXhosa">isiXhosa</option>
+                            <option value="Sesotho">Sesotho</option>
+                            <option value="Sepedi">Sepedi</option>
+                            <option value="History">History</option>
+                            <option value="Geography">Geography</option>
+                            <option value="Life Orientation">Life Orientation</option>
+                            <option value="Business Studies">Business Studies</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Economics">Economics</option>
+                        </select>
+                    </div>
+
+                    <!-- Language -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Language *</label>
+                        <select name="language" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Language</option>
+                            <option value="English">English</option>
+                            <option value="Afrikaans">Afrikaans</option>
+                            <option value="isiZulu">isiZulu</option>
+                            <option value="isiXhosa">isiXhosa</option>
+                            <option value="Sesotho">Sesotho</option>
+                            <option value="Sepedi">Sepedi</option>
+                            <option value="Setswana">Setswana</option>
+                            <option value="Xitsonga">Xitsonga</option>
+                            <option value="Tshivenda">Tshivenda</option>
+                            <option value="isiNdebele">isiNdebele</option>
+                            <option value="SiSwati">SiSwati</option>
+                        </select>
+                    </div>
+
+                    <!-- Difficulty -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Difficulty *</label>
+                        <select name="difficulty" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Difficulty</option>
+                            <option value="beginner">Beginner</option>
+                            <option value="intermediate">Intermediate</option>
+                            <option value="advanced">Advanced</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Brief description of the quiz..."></textarea>
+                </div>
+
+                <!-- Quiz Settings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Time Limit -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Time Limit (minutes)</label>
+                        <input type="number" name="time_limit" min="1" max="180" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Leave empty for no time limit">
+                    </div>
+
+                    <!-- Visibility -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Visibility *</label>
+                        <select name="visibility" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="all">Visible to All</option>
+                            <option value="teachers">Visible to Teachers Only</option>
+                            {% if current_user.is_admin() %}
+                            <option value="admin">Visible to Admin Only</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Quiz Options -->
+                <div class="flex items-center space-x-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="randomize_questions" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-sm text-gray-700">Randomize question order</span>
+                    </label>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end space-x-4">
+                    <a href="{{ url_for('practice_zone') }}" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                        Cancel
+                    </a>
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-plus mr-2"></i>Create Quiz
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Question Types Preview -->
+        <div class="quiz-card rounded-xl shadow-xl p-8">
+            <h3 class="text-xl font-bold text-gray-900 mb-6">Available Question Types</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Multiple Choice -->
+                <div class="question-type-card border-2 border-gray-200 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-list-ul text-2xl text-blue-600 mr-3"></i>
+                        <h4 class="text-lg font-semibold text-gray-900">Multiple Choice</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Questions with multiple options where learners select the correct answer.</p>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Example:</p>
+                        <p class="text-sm text-gray-600">What is 2 + 2?</p>
+                        <div class="mt-2 space-y-1">
+                            <div class="text-xs text-gray-500">• 3</div>
+                            <div class="text-xs text-green-600">• 4 ✓</div>
+                            <div class="text-xs text-gray-500">• 5</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Short Answer -->
+                <div class="question-type-card border-2 border-gray-200 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-edit text-2xl text-green-600 mr-3"></i>
+                        <h4 class="text-lg font-semibold text-gray-900">Short Answer</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Questions requiring brief written responses from learners.</p>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Example:</p>
+                        <p class="text-sm text-gray-600">What is the capital of South Africa?</p>
+                        <div class="mt-2">
+                            <div class="text-xs bg-white border rounded px-2 py-1">Cape Town, Pretoria, Bloemfontein</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Essay -->
+                <div class="question-type-card border-2 border-gray-200 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-file-alt text-2xl text-purple-600 mr-3"></i>
+                        <h4 class="text-lg font-semibold text-gray-900">Essay</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Long-form questions requiring detailed written responses.</p>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Example:</p>
+                        <p class="text-sm text-gray-600">Discuss the impact of apartheid on education in South Africa. (150+ words)</p>
+                        <div class="mt-2">
+                            <div class="text-xs bg-white border rounded px-2 py-1 h-12"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Comprehension -->
+                <div class="question-type-card border-2 border-gray-200 rounded-lg p-6">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-book-open text-2xl text-orange-600 mr-3"></i>
+                        <h4 class="text-lg font-semibold text-gray-900">Reading Comprehension</h4>
+                    </div>
+                    <p class="text-gray-600 text-sm mb-4">Questions based on a reading passage with multiple sub-questions.</p>
+                    <div class="bg-gray-50 rounded-lg p-3">
+                        <p class="text-sm font-medium text-gray-700 mb-2">Example:</p>
+                        <p class="text-xs text-gray-600 mb-2">[Reading passage about Nelson Mandela...]</p>
+                        <div class="space-y-1">
+                            <div class="text-xs text-gray-600">1. How long was Mandela imprisoned?</div>
+                            <div class="text-xs text-gray-600">2. What year did he become president?</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle text-blue-600 mr-2"></i>
+                    <p class="text-sm text-blue-800">
+                        <strong>Next Step:</strong> After creating your quiz, you'll be able to add questions of any of these types and customize them with explanations, points, and more.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactive hover effects
+        document.querySelectorAll('.question-type-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Form validation
+        document.querySelector('form').addEventListener('submit', (e) => {
+            const requiredFields = ['title', 'grade', 'subject', 'language', 'difficulty', 'visibility'];
+            let isValid = true;
+
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`[name="${field}"]`);
+                if (!input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                } else {
+                    input.classList.remove('border-red-500');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Please fill in all required fields.');
+            }
+        });
+    </script>
+</body>
+</html>

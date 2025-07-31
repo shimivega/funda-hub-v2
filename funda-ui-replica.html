@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Funda App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: #9CA3AF;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .toggle-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 21px;
+            height: 21px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .banner-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 0;
+            margin: 0;
+        }
+        .dashboard-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+        }
+        .icon-circle {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .nav-section {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 32px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div style="background: white; padding: 16px 24px; border-bottom: 1px solid #e5e7eb;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            <!-- Logo -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #3B82F6, #8B5CF6); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: white; font-size: 18px; font-weight: bold;">F</span>
+                </div>
+                <h1 style="font-size: 20px; font-weight: bold; color: #111827; margin: 0;">Funda App</h1>
+            </div>
+            
+            <!-- Theme Toggle -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <span style="font-size: 14px; color: #6B7280;">Light</span>
+                <div class="toggle-switch">
+                    <div class="toggle-knob"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <div class="banner-container">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 32px 24px;">
+            <div style="background: white; border-radius: 20px; padding: 20px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);">
+                <img src="assets/images/Gemini_Generated_Image_4d3hka4d3hka4d3h.png" 
+                     alt="Students Learning" 
+                     style="width: 100%; height: 300px; object-fit: cover; border-radius: 16px;"
+                     onerror="this.style.background='linear-gradient(135deg, #667eea 0%, #764ba2 100%)'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.innerHTML='<div style=&quot;color: white; font-size: 20px; font-weight: 600;&quot;>Students Learning Together</div>';">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div style="max-width: 1200px; margin: -16px auto 0; padding: 0 24px;">
+        <div class="nav-section">
+            <div style="display: flex; justify-content: center; align-items: center; gap: 32px; flex-wrap: wrap;">
+                <!-- Grade -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label style="font-size: 14px; font-weight: 500; color: #374151;">Grade</label>
+                    <select style="background: #F9FAFB; border: 1px solid #D1D5DB; color: #111827; font-size: 14px; border-radius: 8px; padding: 8px 12px; min-width: 100px;">
+                        <option selected>Grade R</option>
+                        <option>Grade 1</option>
+                        <option>Grade 2</option>
+                        <option>Grade 3</option>
+                        <option>Grade 4</option>
+                        <option>Grade 5</option>
+                        <option>Grade 6</option>
+                        <option>Grade 7</option>
+                        <option>Grade 8</option>
+                        <option>Grade 9</option>
+                        <option>Grade 10</option>
+                        <option>Grade 11</option>
+                        <option>Grade 12</option>
+                    </select>
+                </div>
+                
+                <!-- Language -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label style="font-size: 14px; font-weight: 500; color: #374151;">Language</label>
+                    <select style="background: #F9FAFB; border: 1px solid #D1D5DB; color: #111827; font-size: 14px; border-radius: 8px; padding: 8px 12px; min-width: 120px;">
+                        <option selected>English</option>
+                        <option>isiZulu</option>
+                        <option>Sesotho</option>
+                        <option>Afrikaans</option>
+                    </select>
+                </div>
+                
+                <!-- Subjects -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <label style="font-size: 14px; font-weight: 500; color: #374151;">Subjects</label>
+                    <button style="background: #111827; color: white; padding: 8px 20px; border-radius: 8px; font-weight: 500; border: none; cursor: pointer;">
+                        Subjects
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 24px 48px;">
+        <h2 style="font-size: 24px; font-weight: bold; color: #111827; margin-bottom: 32px;">Dashboard</h2>
+        
+        <!-- Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+            <!-- Practice Zone -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #EF4444, #DC2626); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="12" cy="12" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+                            <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Practice Zone</h3>
+                </div>
+            </div>
+            
+            <!-- Study Groups -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Study Groups</h3>
+                </div>
+            </div>
+            
+            <!-- Textbooks -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #F59E0B, #D97706); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Textbooks</h3>
+                </div>
+            </div>
+            
+            <!-- Classrooms -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #10B981, #059669); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Classrooms</h3>
+                </div>
+            </div>
+            
+            <!-- Chat -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #F59E0B, #D97706); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Chat</h3>
+                </div>
+            </div>
+            
+            <!-- Profile -->
+            <div class="dashboard-card">
+                <div style="text-align: center;">
+                    <div class="icon-circle" style="background: linear-gradient(135deg, #374151, #111827); margin: 0 auto 16px;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+                            <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        </svg>
+                    </div>
+                    <h3 style="font-size: 18px; font-weight: 600; color: #111827; margin: 0;">Profile</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,279 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Hero Section with Students -->
+<div class="hero-bg relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="relative z-10">
+            <!-- Hero Image Area -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 mb-8">
+                <div class="flex flex-wrap items-center justify-center space-x-4 space-y-4">
+                    <!-- Student Characters (using emojis and icons to represent the diverse students from the image) -->
+                    <div class="flex items-center space-x-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-user-graduate text-white text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 font-medium">Grade R</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-blue-400 to-cyan-500 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-book text-white text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 font-medium">Grade R</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-pencil-alt text-white text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 font-medium">Grade 12</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center mb-2">
+                                <i class="fas fa-calculator text-white text-xl"></i>
+                            </div>
+                            <span class="text-xs text-gray-600 dark:text-gray-300 font-medium">Grade 12</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bookshelf and Study Environment Icons -->
+                <div class="flex justify-center items-center mt-6 space-x-8">
+                    <i class="fas fa-clock text-4xl text-gray-400"></i>
+                    <i class="fas fa-books text-4xl text-blue-500"></i>
+                    <i class="fas fa-chalkboard-teacher text-4xl text-green-500"></i>
+                    <i class="fas fa-users text-4xl text-purple-500"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Navigation Tabs -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <div class="flex flex-wrap justify-center space-x-8 space-y-2">
+            <!-- Grade Selector -->
+            <div class="flex items-center space-x-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Grade</label>
+                <select class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2">
+                    <option>Grade R</option>
+                    <option>Grade 1</option>
+                    <option>Grade 2</option>
+                    <option>Grade 3</option>
+                    <option>Grade 4</option>
+                    <option>Grade 5</option>
+                    <option>Grade 6</option>
+                    <option>Grade 7</option>
+                    <option>Grade 8</option>
+                    <option>Grade 9</option>
+                    <option>Grade 10</option>
+                    <option>Grade 11</option>
+                    <option>Grade 12</option>
+                    <option>ABET</option>
+                </select>
+            </div>
+            
+            <!-- Language Selector -->
+            <div class="flex items-center space-x-2">
+                <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Language</label>
+                <select class="bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2">
+                    <option>English</option>
+                    <option>isiZulu</option>
+                    <option>Sesotho</option>
+                    <option>Afrikaans</option>
+                </select>
+            </div>
+            
+            <!-- Subjects Button -->
+            <button class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-6 py-2 rounded-lg font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">
+                Subjects
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Grid -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Dashboard</h2>
+    
+    <!-- First Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+        <!-- Practice Zone -->
+        <a href="{{ url_for('practice_zone') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-bullseye text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Practice Zone</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Test your knowledge with quizzes and exercises</p>
+            </div>
+        </a>
+        
+        <!-- Study Groups -->
+        <a href="{{ url_for('study_groups') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-users text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Study Groups</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Join or create study groups with peers</p>
+            </div>
+        </a>
+        
+        <!-- Educational Resources -->
+        <a href="{{ url_for('resources') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-books text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Resources</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Access textbooks, past exams, and study materials</p>
+            </div>
+        </a>
+        
+        <!-- Games Dashboard -->
+        <a href="{{ url_for('games') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-purple-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-gamepad text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">🎮 Games</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Learn through fun educational games</p>
+            </div>
+        </a>
+    </div>
+    
+    <!-- Second Row -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Classrooms -->
+        <a href="{{ url_for('classrooms') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-chalkboard-teacher text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Classrooms</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Join virtual classrooms and lessons</p>
+            </div>
+        </a>
+        
+        <!-- Chat -->
+        <a href="{{ url_for('chat') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-comments text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Chat</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Connect with friends and teachers</p>
+            </div>
+        </a>
+        
+        <!-- Support Center -->
+        <a href="{{ url_for('support_center') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-pink-400 to-red-500 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-heart text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Support Center</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Get help with bullying, depression, or abuse</p>
+            </div>
+        </a>
+        
+        <!-- Teacher/Admin Features -->
+        {% if current_user.is_teacher() %}
+        <a href="{{ url_for('teacher_collaboration') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-user-friends text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Teacher Hub</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Collaborate with other teachers</p>
+            </div>
+        </a>
+        {% endif %}
+        
+        <!-- Profile -->
+        <a href="{{ url_for('profile') }}" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 bg-gradient-to-br from-gray-400 to-gray-600 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-user text-white text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Profile</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300">Manage your account and settings</p>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- AI Assistant Modal -->
+<div id="aiModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-96 overflow-hidden">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">AI Study Assistant</h3>
+                <button onclick="closeAIAssistant()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div id="chatMessages" class="h-48 overflow-y-auto mb-4 space-y-3">
+                    <div class="bg-blue-50 dark:bg-blue-900 p-3 rounded-lg">
+                        <p class="text-sm text-blue-800 dark:text-blue-200">👋 Hi! I'm your AI study assistant. Ask me anything about your schoolwork!</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <input type="text" id="chatInput" placeholder="Ask me about math, science, languages..." 
+                           class="flex-1 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    <button onclick="sendMessage()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function openAIAssistant() {
+    document.getElementById('aiModal').classList.remove('hidden');
+}
+
+function closeAIAssistant() {
+    document.getElementById('aiModal').classList.add('hidden');
+}
+
+function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const messages = document.getElementById('chatMessages');
+    
+    if (input.value.trim()) {
+        // Add user message
+        const userMsg = document.createElement('div');
+        userMsg.className = 'bg-gray-100 dark:bg-gray-700 p-3 rounded-lg ml-8';
+        userMsg.innerHTML = `<p class="text-sm text-gray-800 dark:text-gray-200">${input.value}</p>`;
+        messages.appendChild(userMsg);
+        
+        // Simulate AI response
+        setTimeout(() => {
+            const aiMsg = document.createElement('div');
+            aiMsg.className = 'bg-blue-50 dark:bg-blue-900 p-3 rounded-lg mr-8';
+            aiMsg.innerHTML = `<p class="text-sm text-blue-800 dark:text-blue-200">🤖 I understand you're asking about "${input.value}". Let me help you with that! This is a demo response - in the full app, I'd provide detailed explanations and step-by-step solutions.</p>`;
+            messages.appendChild(aiMsg);
+            messages.scrollTop = messages.scrollHeight;
+        }, 1000);
+        
+        input.value = '';
+        messages.scrollTop = messages.scrollHeight;
+    }
+}
+
+// Allow Enter key to send message
+document.getElementById('chatInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        sendMessage();
+    }
+});
+</script>
+{% endblock %}

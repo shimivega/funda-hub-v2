@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">🎮 Games Dashboard</h1>
+                <p class="text-gray-600 dark:text-gray-300">Learn through fun and interactive educational games</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <!-- Geography Game -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🌍</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Geography Match</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Drag & Drop</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Match geographic terms with their definitions. Test your knowledge of landforms and features!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">Geography</span>
+                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">Grade 4-8</span>
+                    </div>
+                    <a href="{{ url_for('geography_game') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium">
+                        Play Now
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Math Game Placeholder -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow opacity-75">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🔢</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Math Challenge</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Coming Soon</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Solve math problems in a fun, interactive way. Practice arithmetic, algebra, and more!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded-full">Mathematics</span>
+                        <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded-full">All Grades</span>
+                    </div>
+                    <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Science Game Placeholder -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow opacity-75">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🧪</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Science Lab</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Coming Soon</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Conduct virtual experiments and learn scientific concepts through interactive simulations!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-xs rounded-full">Science</span>
+                        <span class="px-2 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs rounded-full">Grade 6-12</span>
+                    </div>
+                    <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Language Matching Game -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-orange-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🗣️</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Language Match</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Drag & Drop</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Match English words with their translations in South African languages. Learn vocabulary in multiple languages!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 text-xs rounded-full">Languages</span>
+                        <span class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs rounded-full">All Grades</span>
+                    </div>
+                    <a href="{{ url_for('language_game') }}" class="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 text-sm font-medium">
+                        Play Now
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Game Placeholder -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow opacity-75">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-red-400 to-pink-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🏛️</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">History Quest</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Coming Soon</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Journey through South African history and learn about important events and figures!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs rounded-full">History</span>
+                        <span class="px-2 py-1 bg-indigo-100 dark:bg-indigo-900 text-indigo-800 dark:text-indigo-200 text-xs rounded-full">Grade 7-12</span>
+                    </div>
+                    <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Life Skills Game Placeholder -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow opacity-75">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-gradient-to-br from-teal-400 to-cyan-600 rounded-full flex items-center justify-center mr-4">
+                        <span class="text-white text-2xl">🌟</span>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Life Skills</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">Coming Soon</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 dark:text-gray-300 mb-4">Learn important life skills through interactive scenarios and decision-making games!</p>
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2 py-1 bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 text-xs rounded-full">Life Skills</span>
+                        <span class="px-2 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs rounded-full">All Grades</span>
+                    </div>
+                    <button disabled class="px-4 py-2 bg-gray-400 text-white rounded-lg text-sm font-medium cursor-not-allowed">
+                        Coming Soon
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Statistics -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">🏆 Your Gaming Progress</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="text-center">
+                <div class="text-3xl font-bold text-green-600 mb-2">1</div>
+                <p class="text-gray-600 dark:text-gray-300">Games Available</p>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold text-blue-600 mb-2">0</div>
+                <p class="text-gray-600 dark:text-gray-300">Games Completed</p>
+            </div>
+            <div class="text-center">
+                <div class="text-3xl font-bold text-purple-600 mb-2">0</div>
+                <p class="text-gray-600 dark:text-gray-300">Total Score</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Classrooms</h1>
+            <p class="text-gray-600 dark:text-gray-300">
+                {% if current_user.role == 'teacher' %}
+                Manage your virtual classrooms and students
+                {% else %}
+                Join virtual classrooms and access lessons
+                {% endif %}
+            </p>
+        </div>
+        {% if current_user.role == 'teacher' %}
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+            <i class="fas fa-plus mr-2"></i>Create Classroom
+        </button>
+        {% else %}
+        <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+            <i class="fas fa-plus mr-2"></i>Join Classroom
+        </button>
+        {% endif %}
+    </div>
+
+    {% if current_user.role == 'learner' %}
+    <!-- Join Classroom Section -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">Join a Classroom</h2>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <input type="text" placeholder="Enter classroom code" 
+                   class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+            <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                Join Classroom
+            </button>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Classrooms Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% if current_user.role == 'teacher' %}
+        <!-- Sample Teacher Classroom -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-calculator text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Grade 12 Math</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">25 students</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Advanced mathematics for matric students preparing for final exams.</p>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">Code: MTH12A</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Created 2 weeks ago</span>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>Manage
+                </button>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-video mr-2"></i>Start Class
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                        <i class="fas fa-flask text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Grade 11 Science</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-300">18 students</p>
+                    </div>
+                </div>
+                <div class="relative">
+                    <button class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Physical Science covering chemistry and physics fundamentals.</p>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">Code: SCI11B</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">Created 1 month ago</span>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-chalkboard-teacher mr-2"></i>Manage
+                </button>
+                <button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-video mr-2"></i>Start Class
+                </button>
+            </div>
+        </div>
+        {% else %}
+        <!-- Sample Learner Classrooms -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-calculator text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Mathematics</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Mrs. Johnson</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Advanced algebra and calculus for Grade 12 students.</p>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">25 students</span>
+                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                    <div class="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                    Live now
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-play mr-2"></i>Join Class
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-folder mr-2"></i>Resources
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-flask text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Physical Science</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Mr. Smith</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Chemistry and physics concepts for Grade 11 learners.</p>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">18 students</span>
+                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Next: Tomorrow 10:00
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-gray-400 text-white px-4 py-2 rounded-lg text-sm cursor-not-allowed">
+                    <i class="fas fa-clock mr-2"></i>Scheduled
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-folder mr-2"></i>Resources
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 card-hover">
+            <div class="flex items-center space-x-3 mb-4">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book text-white text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">English Literature</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Ms. Williams</p>
+                </div>
+            </div>
+            <p class="text-gray-600 dark:text-gray-300 mb-4">Poetry, novels, and essay writing for Grade 12 students.</p>
+            <div class="flex items-center justify-between mb-4">
+                <span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-full">22 students</span>
+                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400">
+                    <div class="w-2 h-2 bg-gray-400 rounded-full mr-2"></div>
+                    Next: Friday 14:00
+                </div>
+            </div>
+            <div class="flex space-x-2">
+                <button class="flex-1 bg-gray-400 text-white px-4 py-2 rounded-lg text-sm cursor-not-allowed">
+                    <i class="fas fa-clock mr-2"></i>Scheduled
+                </button>
+                <button class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg text-sm">
+                    <i class="fas fa-folder mr-2"></i>Resources
+                </button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if current_user.role == 'teacher' %}
+    <!-- Recent Activity -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mt-8">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6">Recent Activity</h2>
+        <div class="space-y-4">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-user-plus text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-900 dark:text-white">John Doe joined Grade 12 Math</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">2 hours ago</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-file-upload text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-900 dark:text-white">Assignment uploaded to Grade 11 Science</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">5 hours ago</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-video text-white text-sm"></i>
+                </div>
+                <div class="flex-1">
+                    <p class="text-gray-900 dark:text-white">Class session completed for Grade 12 Math</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">1 day ago</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

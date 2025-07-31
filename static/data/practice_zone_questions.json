@@ -1,0 +1,370 @@
+[
+  {
+    "grade": "Grade 7",
+    "subject": "Mathematics",
+    "language": "English",
+    "topic": "Basic Arithmetic",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "What is 9 × 8?",
+        "options": ["72", "81", "69", "88"],
+        "correctAnswer": "72",
+        "explanation": "9 × 8 = 72. This is basic multiplication."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "Which part of the plant is responsible for photosynthesis?",
+        "options": ["Roots", "Stem", "Leaves", "Flowers"],
+        "correctAnswer": "Leaves",
+        "explanation": "Photosynthesis primarily occurs in the leaves where chloroplasts are located."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "What is the result of 39 + 5?",
+        "options": ["44", "43", "45", "42"],
+        "correctAnswer": "44",
+        "explanation": "39 + 5 = 44. Simple addition."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 7",
+    "subject": "Mathematics",
+    "language": "Afrikaans",
+    "topic": "Basiese Rekenkunde",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Wat is 9 × 8?",
+        "options": ["72", "81", "69", "88"],
+        "correctAnswer": "72",
+        "explanation": "9 × 8 = 72. Dit is basiese vermenigvuldiging."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "Wat is die helfte van 144?",
+        "options": ["72", "74", "76", "70"],
+        "correctAnswer": "72",
+        "explanation": "Die helfte van 144 is 144 ÷ 2 = 72."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 8",
+    "subject": "Life Sciences",
+    "language": "isiZulu",
+    "topic": "Izitshalo Nezilwane",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "short-answer",
+        "question": "Iyiphi ingxenye yesitshalo eyenza ama-carbohydrates ngesikhathi sokuphotosynthesis?",
+        "correctAnswer": "Amahlamvu",
+        "explanation": "Amahlamvu ayingxenye yesitshalo eyenza ukudla ngokusebenzisa ukukhanya kwelanga."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 8",
+    "subject": "Life Sciences",
+    "language": "Sepedi",
+    "topic": "Diphedi tša Dimela",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke eng yeo e diregago ka gare ga sel?",
+        "options": ["Photosynthesis", "Osmosis", "Diffusion", "Respiration"],
+        "correctAnswer": "Photosynthesis",
+        "explanation": "Photosynthesis ke tshepedišo yeo e diregago ka gare ga disel tša dimela."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 8",
+    "subject": "EMS",
+    "language": "Afrikaans",
+    "topic": "Ekonomiese Bestuur",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Wat is 'n voorbeeld van vaste koste?",
+        "options": ["Huur", "Waterrekening", "Telefoonkoste", "Brandstof"],
+        "correctAnswer": "Huur",
+        "explanation": "Huur is 'n vaste koste omdat dit elke maand dieselfde bedrag is."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 9",
+    "subject": "History",
+    "language": "English",
+    "topic": "South African History",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "essay",
+        "question": "Discuss the impact of apartheid on education in South Africa.",
+        "instruction": "Write at least 150 words explaining how apartheid laws affected schools and learners.",
+        "explanation": "Consider the Bantu Education Act, unequal funding, language policies, and long-term effects."
+      },
+      {
+        "type": "essay",
+        "question": "Explain the causes of the Mineral Revolution in South Africa.",
+        "instruction": "Write a well-structured paragraph. Mention key minerals discovered and how it changed the economy.",
+        "explanation": "Focus on diamond and gold discoveries, labor migration, and economic transformation."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "Mathematics",
+    "language": "isiZulu",
+    "topic": "Algebraic Expressions",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Yimaphi amafomula asetshenziswa ukubala indawo ye-triangle?",
+        "options": ["A = bh", "A = 1/2bh", "A = ab", "A = r^2π"],
+        "correctAnswer": "A = 1/2bh",
+        "explanation": "Indawo ye-triangle ibalwa ngo-1/2 ubude × ukuphakama (half base times height)."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "Geography",
+    "language": "isiXhosa",
+    "topic": "Umhlaba Nendalo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Yintoni umhlaba ojikelezayo?",
+        "options": ["Ilanga", "Inyanga", "Umhlaba", "Ilanga nenyanga"],
+        "correctAnswer": "Umhlaba",
+        "explanation": "Umhlaba ujikeleza ilanga kwaye inyanga ijikeleza umhlaba."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "Life Sciences",
+    "language": "isiZulu",
+    "topic": "Izakhi Zempilo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "short-answer",
+        "question": "Iyini umsebenzi we-mitochondrion eselulwaneni?",
+        "correctAnswer": "Ukuvelisa amandla e-ATP",
+        "explanation": "I-mitochondrion iyingxenye yesel eyenza amandla e-ATP ngokusebenzisa i-cellular respiration."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 10",
+    "subject": "English",
+    "language": "English",
+    "topic": "Reading Comprehension",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "comprehension",
+        "passage": "Nelson Mandela was imprisoned for 27 years. Upon his release, he led South Africa into democracy and became the country's first Black president in 1994.",
+        "questions": [
+          {
+            "question": "How long was Nelson Mandela imprisoned?",
+            "type": "short-answer",
+            "correctAnswer": "27 years",
+            "explanation": "The passage clearly states he was imprisoned for 27 years."
+          },
+          {
+            "question": "What leadership role did he take after release?",
+            "type": "short-answer",
+            "correctAnswer": "President",
+            "explanation": "He became South Africa's first Black president in 1994."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "grade": "Grade 12",
+    "subject": "History",
+    "language": "isiZulu",
+    "topic": "Umlando WaseNingizimu Afrika",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ubani owaqala i-ANC?",
+        "options": ["Nelson Mandela", "Albert Luthuli", "John Dube", "Oliver Tambo"],
+        "correctAnswer": "John Dube",
+        "explanation": "UJohn Dube wayengomunye wabasunguli be-ANC ngo-1912."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 12",
+    "subject": "Physical Sciences",
+    "language": "Sepedi",
+    "topic": "Organic Chemistry - Alkanes",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke eng leina la IUPAC la CH₃CH(CH₃)CH₂CH₃?",
+        "options": ["2-Methylbutane", "Pentane", "2,2-Dimethylpropane", "Isopentane"],
+        "correctAnswer": "2-Methylbutane",
+        "explanation": "Molekule ye e na le ketane e telele ya dikhabone tše nne (butane) ka sehlopha sa methyl (CH₃) go khabone ya bobedi."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 12",
+    "subject": "Geography",
+    "language": "Sesotho",
+    "topic": "Tikoloho le Phetoho ya Boemo ba Leholimo",
+    "difficulty": "advanced",
+    "questions": [
+      {
+        "type": "comprehension",
+        "passage": "Ho na le leqhubu le matla la mocheso Afrika Borwa nakong ea lehlabula. Sena se ama temo hampe le bophelo ba batho.",
+        "questions": [
+          {
+            "question": "Leqhubu la mocheso le ama eng haholo?",
+            "type": "short-answer",
+            "correctAnswer": "Temo le bophelo ba batho",
+            "explanation": "Khatiso e bolela hore leqhubu la mocheso le ama temo le bophelo ba batho."
+          },
+          {
+            "question": "Ke nakong efe ea selemo moo leqhubu lena le hlahang?",
+            "type": "short-answer",
+            "correctAnswer": "Lehlabula",
+            "explanation": "Khatiso e bolela hore leqhubu la mocheso le hlaha nakong ea lehlabula."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "grade": "ABET",
+    "subject": "Languages",
+    "language": "Sesotho",
+    "topic": "Puo le Tlhahlobo",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Ke lentsoe lefe le supang nako e fetileng?",
+        "options": ["Ke ea", "Ke ile", "Ke tla ea", "Ke eme"],
+        "correctAnswer": "Ke ile",
+        "explanation": "'Ke ile' ke lentsoe le supang nako e fetileng Sesothong."
+      }
+    ]
+  },
+  {
+    "grade": "ABET Level 2",
+    "subject": "Literacy (English)",
+    "language": "English",
+    "topic": "Basic Reading Comprehension",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Which word means to 'look for information'?",
+        "options": ["Hide", "Search", "Close", "Forget"],
+        "correctAnswer": "Search",
+        "explanation": "To 'search' means to look carefully for something."
+      }
+    ]
+  },
+  {
+    "grade": "Grade R",
+    "subject": "Life Skills",
+    "language": "isiXhosa",
+    "topic": "My Body and Health",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Leliphi ilungu lomzimba olisebenzisayo ukubona izinto?",
+        "options": ["Iindlebe", "Amehlo", "Umlomo", "Izandla"],
+        "correctAnswer": "Amehlo",
+        "explanation": "Sisebenzisa amehlo ethu ukubona izinto ezisingqongileyo."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 4",
+    "subject": "Life Skills",
+    "language": "Afrikaans",
+    "topic": "Personal Health and Hygiene",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Hoeveel keer per dag moet jy jou tande borsel?",
+        "options": ["Een keer", "Twee keer", "Drie keer", "Slegs as dit seer is"],
+        "correctAnswer": "Twee keer",
+        "explanation": "Dit is belangrik om jou tande ten minste twee keer per dag te borsel om dit skoon en gesond te hou."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 7",
+    "subject": "Natural Sciences",
+    "language": "English",
+    "topic": "Ecosystems and Food Chains",
+    "difficulty": "beginner",
+    "questions": [
+      {
+        "type": "multiple-choice",
+        "question": "Which part of the plant is responsible for photosynthesis?",
+        "options": ["Roots", "Stem", "Leaves", "Flowers"],
+        "correctAnswer": "Leaves",
+        "explanation": "Photosynthesis, the process of making food using sunlight, primarily takes place in the chloroplasts found in leaves."
+      },
+      {
+        "type": "multiple-choice",
+        "question": "What is the primary source of energy for almost all ecosystems on Earth?",
+        "options": ["Water", "Soil", "Sunlight", "Wind"],
+        "correctAnswer": "Sunlight",
+        "explanation": "Most ecosystems rely on sunlight, which is captured by producers like plants during photosynthesis."
+      }
+    ]
+  },
+  {
+    "grade": "Grade 9",
+    "subject": "History",
+    "language": "English",
+    "topic": "South African History - Essays",
+    "difficulty": "intermediate",
+    "questions": [
+      {
+        "type": "essay",
+        "question": "Describe the causes and effects of deforestation in South Africa.",
+        "instruction": "Write a comprehensive essay discussing the main causes of deforestation and its environmental and social impacts.",
+        "explanation": "Consider factors like urbanization, agriculture, mining, and the effects on biodiversity and communities."
+      },
+      {
+        "type": "essay",
+        "question": "Write an essay on the impact of Apartheid on South African education.",
+        "instruction": "Discuss how apartheid policies affected educational opportunities and quality for different racial groups.",
+        "explanation": "Focus on the Bantu Education Act, resource allocation, and long-term consequences."
+      },
+      {
+        "type": "essay",
+        "question": "Discuss how HIV/AIDS affects the youth in South Africa.",
+        "instruction": "Analyze the social, economic, and health impacts of HIV/AIDS on young people in South Africa.",
+        "explanation": "Consider prevention, treatment, stigma, and support systems."
+      }
+    ]
+  }
+]

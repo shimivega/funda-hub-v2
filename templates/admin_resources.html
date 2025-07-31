@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Resource Management</h1>
+            <p class="text-gray-600 dark:text-gray-300">Upload and manage educational resources</p>
+        </div>
+        <div class="flex space-x-4">
+            <button onclick="openUploadModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-upload mr-2"></i>Upload Resource
+            </button>
+            <button onclick="triggerScrape()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                <i class="fas fa-sync mr-2"></i>Update Resources
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-file text-white text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ resources|length }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Total Resources</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-download text-white text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ resources|sum(attribute='download_count') }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Total Downloads</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ resources|selectattr('grade')|map(attribute='grade')|unique|list|length }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Grades Covered</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+            <div class="flex items-center">
+                <div class="w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
+                    <i class="fas fa-book text-white text-xl"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ resources|selectattr('subject')|map(attribute='subject')|unique|list|length }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-300">Subjects</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resources Table -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white">All Resources</h2>
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                <thead class="bg-gray-50 dark:bg-gray-700">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Resource</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Grade</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Subject</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Source</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Downloads</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Size</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                    {% for resource in resources %}
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gradient-to-br 
+                                    {% if resource.resource_type == 'Textbook' %}from-blue-400 to-blue-600
+                                    {% elif resource.resource_type == 'Past Exam' %}from-red-400 to-red-600
+                                    {% elif resource.resource_type == 'Teacher Guide' %}from-green-400 to-green-600
+                                    {% elif resource.resource_type == 'Worksheet' %}from-yellow-400 to-yellow-600
+                                    {% else %}from-purple-400 to-purple-600{% endif %}
+                                    rounded-lg flex items-center justify-center">
+                                    <i class="fas fa-file text-white text-sm"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">{{ resource.original_filename[:50] }}{% if resource.original_filename|length > 50 %}...{% endif %}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">{{ resource.created_at.strftime('%Y-%m-%d') }}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ resource.grade }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ resource.subject }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                {% if resource.resource_type == 'Textbook' %}bg-blue-100 text-blue-800
+                                {% elif resource.resource_type == 'Past Exam' %}bg-red-100 text-red-800
+                                {% elif resource.resource_type == 'Teacher Guide' %}bg-green-100 text-green-800
+                                {% elif resource.resource_type == 'Worksheet' %}bg-yellow-100 text-yellow-800
+                                {% else %}bg-purple-100 text-purple-800{% endif %}">
+                                {{ resource.resource_type }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ resource.source }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ resource.download_count }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">{{ (resource.file_size / 1024 / 1024) | round(1) }} MB</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div class="flex space-x-2">
+                                <a href="{{ url_for('download_resource', resource_id=resource.id) }}" class="text-blue-600 hover:text-blue-900">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                                <button onclick="deleteResource({{ resource.id }})" class="text-red-600 hover:text-red-900">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Upload Modal -->
+<div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-2xl w-full">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Upload Resource</h3>
+                <button onclick="closeUploadModal()" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <form id="uploadForm" enctype="multipart/form-data" class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">File</label>
+                        <input type="file" name="file" accept=".pdf,.doc,.docx,.epub" required
+                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grade</label>
+                        <select name="grade" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="">Select Grade</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                            <option value="ABET">ABET</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Subject</label>
+                        <select name="subject" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physical Science">Physical Science</option>
+                            <option value="Life Sciences">Life Sciences</option>
+                            <option value="English">English</option>
+                            <option value="Afrikaans">Afrikaans</option>
+                            <option value="History">History</option>
+                            <option value="Geography">Geography</option>
+                            <option value="Business Studies">Business Studies</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Economics">Economics</option>
+                            <option value="Life Orientation">Life Orientation</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Resource Type</label>
+                        <select name="resource_type" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                            <option value="">Select Type</option>
+                            <option value="Textbook">Textbook</option>
+                            <option value="Teacher Guide">Teacher Guide</option>
+                            <option value="Past Exam">Past Exam</option>
+                            <option value="Worksheet">Worksheet</option>
+                            <option value="Study Guide">Study Guide</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-4 mt-6">
+                    <button type="button" onclick="closeUploadModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">
+                        Cancel
+                    </button>
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+                        <i class="fas fa-upload mr-2"></i>Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+function openUploadModal() {
+    document.getElementById('uploadModal').classList.remove('hidden');
+}
+
+function closeUploadModal() {
+    document.getElementById('uploadModal').classList.add('hidden');
+    document.getElementById('uploadForm').reset();
+}
+
+function triggerScrape() {
+    if (confirm('This will update resources from external sources. This may take several minutes. Continue?')) {
+        const button = event.target;
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Updating...';
+        button.disabled = true;
+        
+        fetch('/admin/resources/scrape', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Update completed! Found ${data.result.total_resources_found} resources, ${data.result.successful_downloads} downloaded successfully.`);
+                location.reload();
+            } else {
+                alert('Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            alert('Error: ' + error.message);
+        })
+        .finally(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        });
+    }
+}
+
+function deleteResource(resourceId) {
+    if (confirm('Are you sure you want to delete this resource?')) {
+        // Implementation for delete functionality
+        alert('Delete functionality would be implemented here');
+    }
+}
+
+// Handle upload form submission
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    const submitButton = this.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Uploading...';
+    submitButton.disabled = true;
+    
+    fetch('/admin/resources/upload', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('File uploaded successfully!');
+            closeUploadModal();
+            location.reload();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error: ' + error.message);
+    })
+    .finally(() => {
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    });
+});
+</script>
+{% endblock %}

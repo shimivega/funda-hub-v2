@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Upload Panel - Funda Education</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .upload-card {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        .drag-drop-area {
+            border: 2px dashed #cbd5e0;
+            transition: all 0.3s ease;
+        }
+        .drag-drop-area.dragover {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            min-height: 2.5rem;
+        }
+        .tag {
+            background: #3b82f6;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .tag .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-4">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">F</span>
+                    </div>
+                    <h1 class="text-xl font-semibold text-gray-900">Admin Upload Panel</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-sm text-gray-600">Welcome, {{ current_user.full_name }}</span>
+                    <a href="{{ url_for('dashboard') }}" class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                        <i class="fas fa-arrow-left mr-2"></i>Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- Admin Upload Form -->
+        <div class="upload-card rounded-xl shadow-xl p-8 mb-8">
+            <div class="flex items-center mb-6">
+                <i class="fas fa-upload text-3xl text-blue-600 mr-4"></i>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">Upload Educational Resources</h2>
+                    <p class="text-gray-600">Upload PDFs, videos, and other educational materials</p>
+                </div>
+            </div>
+
+            <form id="uploadForm" enctype="multipart/form-data" class="space-y-6">
+                <!-- File Upload Area -->
+                <div class="drag-drop-area rounded-lg p-8 text-center" id="dropArea">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-lg font-medium text-gray-700 mb-2">Drag and drop your files here</p>
+                    <p class="text-sm text-gray-500 mb-4">or click to browse</p>
+                    <input type="file" id="fileInput" name="file" class="hidden" accept=".pdf,.mp4,.avi,.mov,.wmv,.doc,.docx,.ppt,.pptx">
+                    <button type="button" onclick="document.getElementById('fileInput').click()" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+                        <i class="fas fa-folder-open mr-2"></i>Choose File
+                    </button>
+                    <div id="selectedFile" class="mt-4 hidden">
+                        <div class="flex items-center justify-center space-x-2">
+                            <i class="fas fa-file text-blue-600"></i>
+                            <span id="fileName" class="text-sm font-medium"></span>
+                            <button type="button" onclick="clearFile()" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resource Details -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Grade Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Grade *</label>
+                        <select name="grade" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Grade</option>
+                            <option value="Grade R">Grade R</option>
+                            <option value="Grade 1">Grade 1</option>
+                            <option value="Grade 2">Grade 2</option>
+                            <option value="Grade 3">Grade 3</option>
+                            <option value="Grade 4">Grade 4</option>
+                            <option value="Grade 5">Grade 5</option>
+                            <option value="Grade 6">Grade 6</option>
+                            <option value="Grade 7">Grade 7</option>
+                            <option value="Grade 8">Grade 8</option>
+                            <option value="Grade 9">Grade 9</option>
+                            <option value="Grade 10">Grade 10</option>
+                            <option value="Grade 11">Grade 11</option>
+                            <option value="Grade 12">Grade 12</option>
+                            <option value="ABET Level 1">ABET Level 1</option>
+                            <option value="ABET Level 2">ABET Level 2</option>
+                            <option value="ABET Level 3">ABET Level 3</option>
+                            <option value="ABET Level 4">ABET Level 4</option>
+                        </select>
+                    </div>
+
+                    <!-- Subject Selection -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Subject *</label>
+                        <select name="subject" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physical Sciences">Physical Sciences</option>
+                            <option value="Life Sciences">Life Sciences</option>
+                            <option value="English">English</option>
+                            <option value="Afrikaans">Afrikaans</option>
+                            <option value="isiZulu">isiZulu</option>
+                            <option value="isiXhosa">isiXhosa</option>
+                            <option value="Sesotho">Sesotho</option>
+                            <option value="Sepedi">Sepedi</option>
+                            <option value="History">History</option>
+                            <option value="Geography">Geography</option>
+                            <option value="Life Orientation">Life Orientation</option>
+                            <option value="Business Studies">Business Studies</option>
+                            <option value="Accounting">Accounting</option>
+                            <option value="Economics">Economics</option>
+                            <option value="Tourism">Tourism</option>
+                            <option value="Computer Applications Technology">Computer Applications Technology</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Arts and Culture">Arts and Culture</option>
+                            <option value="Music">Music</option>
+                            <option value="Visual Arts">Visual Arts</option>
+                        </select>
+                    </div>
+
+                    <!-- Resource Type -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Resource Type *</label>
+                        <select name="resource_type" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select Type</option>
+                            <option value="Textbook">Textbook</option>
+                            <option value="Teacher Guide">Teacher Guide</option>
+                            <option value="Past Paper">Past Paper</option>
+                            <option value="Worksheet">Worksheet</option>
+                            <option value="Study Guide">Study Guide</option>
+                            <option value="Video Lesson">Video Lesson</option>
+                            <option value="Assessment">Assessment</option>
+                            <option value="Reference Material">Reference Material</option>
+                            <option value="Practical Guide">Practical Guide</option>
+                        </select>
+                    </div>
+
+                    <!-- Visibility Settings -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Visibility *</label>
+                        <select name="visibility" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="all">Visible to All</option>
+                            <option value="teachers">Visible to Teachers Only</option>
+                            {% if current_user.is_admin() %}
+                            <option value="admin">Visible to Admin Only</option>
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                    <textarea name="description" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="Brief description of the resource..."></textarea>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+                    <div class="tag-input" id="tagInput">
+                        <input type="text" id="tagInputField" placeholder="Type a tag and press Enter..." class="flex-1 outline-none min-w-32">
+                    </div>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <button type="button" onclick="addTag('textbook')" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">textbook</button>
+                        <button type="button" onclick="addTag('teacher-guide')" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">teacher-guide</button>
+                        <button type="button" onclick="addTag('past-paper')" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">past-paper</button>
+                        <button type="button" onclick="addTag('worksheet')" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">worksheet</button>
+                        <button type="button" onclick="addTag('video')" class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm hover:bg-gray-200">video</button>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex justify-end space-x-4">
+                    <button type="button" onclick="resetForm()" class="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50">
+                        <i class="fas fa-undo mr-2"></i>Reset
+                    </button>
+                    <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50" id="submitBtn">
+                        <i class="fas fa-upload mr-2"></i>Upload Resource
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Upload Progress -->
+        <div id="uploadProgress" class="hidden bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div class="flex items-center mb-4">
+                <i class="fas fa-spinner fa-spin text-blue-600 mr-3"></i>
+                <h3 class="text-lg font-semibold">Uploading Resource...</h3>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div id="progressBar" class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <p id="progressText" class="text-sm text-gray-600 mt-2">Preparing upload...</p>
+        </div>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden bg-green-50 border border-green-200 rounded-xl p-6">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle text-green-600 text-xl mr-3"></i>
+                <div>
+                    <h3 class="text-lg font-semibold text-green-800">Upload Successful!</h3>
+                    <p class="text-green-700">Your resource has been uploaded and is now available to users.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedTags = [];
+
+        // File upload handling
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const selectedFile = document.getElementById('selectedFile');
+        const fileName = document.getElementById('fileName');
+
+        // Drag and drop functionality
+        dropArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropArea.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', () => {
+            dropArea.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                showSelectedFile(files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                showSelectedFile(e.target.files[0]);
+            }
+        });
+
+        function showSelectedFile(file) {
+            fileName.textContent = file.name;
+            selectedFile.classList.remove('hidden');
+        }
+
+        function clearFile() {
+            fileInput.value = '';
+            selectedFile.classList.add('hidden');
+        }
+
+        // Tag management
+        const tagInput = document.getElementById('tagInput');
+        const tagInputField = document.getElementById('tagInputField');
+
+        tagInputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const tag = tagInputField.value.trim();
+                if (tag && !selectedTags.includes(tag)) {
+                    addTag(tag);
+                    tagInputField.value = '';
+                }
+            }
+        });
+
+        function addTag(tag) {
+            if (!selectedTags.includes(tag)) {
+                selectedTags.push(tag);
+                renderTags();
+            }
+        }
+
+        function removeTag(tag) {
+            selectedTags = selectedTags.filter(t => t !== tag);
+            renderTags();
+        }
+
+        function renderTags() {
+            const existingTags = tagInput.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+
+            selectedTags.forEach(tag => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `
+                    ${tag}
+                    <span class="remove" onclick="removeTag('${tag}')">&times;</span>
+                `;
+                tagInput.insertBefore(tagElement, tagInputField);
+            });
+        }
+
+        // Form submission
+        document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            
+            // Add tags to form data
+            selectedTags.forEach(tag => {
+                formData.append('tags', tag);
+            });
+
+            // Show progress
+            document.getElementById('uploadProgress').classList.remove('hidden');
+            document.getElementById('submitBtn').disabled = true;
+
+            try {
+                const response = await fetch('/admin/resources/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('uploadProgress').classList.add('hidden');
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    resetForm();
+                } else {
+                    throw new Error(result.error || 'Upload failed');
+                }
+            } catch (error) {
+                alert('Upload failed: ' + error.message);
+                document.getElementById('uploadProgress').classList.add('hidden');
+            } finally {
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+
+        function resetForm() {
+            document.getElementById('uploadForm').reset();
+            selectedTags = [];
+            renderTags();
+            clearFile();
+            document.getElementById('successMessage').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Educational Resources</h1>
+        <p class="text-gray-600 dark:text-gray-300">Access free textbooks and exam papers from trusted South African education sources</p>
+    </div>
+
+    <!-- Grade and Subject Filters -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+        <form method="get" action="{{ url_for('textbooks') }}" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label for="grade" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Grade</label>
+                    <select id="grade" name="grade" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="">All Grades</option>
+                        {% for grade in grades %}
+                            <option value="{{ grade }}" {% if current_grade == grade %}selected{% endif %}>{{ grade }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <label for="subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Subject</label>
+                    <select id="subject" name="subject" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="">All Subjects</option>
+                        {% for subject in subjects %}
+                            <option value="{{ subject }}" {% if current_subject == subject %}selected{% endif %}>{{ subject }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium">
+                        <i class="fas fa-search mr-2"></i>Filter
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Resources List -->
+    <div class="space-y-8">
+        {% if resources %}
+            {% for grade, subjects in resources.items() %}
+                {% if not current_grade or grade == current_grade %}
+                    <div class="mb-8">
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">{{ grade }}</h2>
+                        <div class="space-y-6">
+                            {% for subject, resources_list in subjects.items() %}
+                                {% if not current_subject or subject == current_subject %}
+                                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden">
+                                        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">{{ subject }}</h3>
+                                        </div>
+                                        <div class="divide-y divide-gray-200 dark:divide-gray-700">
+                                            {% for resource in resources_list %}
+                                                <div class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                                                    <div class="flex items-center justify-between">
+                                                        <div class="flex items-center space-x-4">
+                                                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                                                                {% if resource.resource_type == 'textbook' %}
+                                                                    <i class="fas fa-book text-white"></i>
+                                                                {% else %}
+                                                                    <i class="fas fa-file-alt text-white"></i>
+                                                                {% endif %}
+                                                            </div>
+                                                            <div>
+                                                                <h4 class="text-sm font-medium text-gray-900 dark:text-white">
+                                                                    {{ resource.original_filename }}
+                                                                    {% if resource.resource_type == 'exam_paper' %}
+                                                                        <span class="ml-2 px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200">
+                                                                            Exam Paper
+                                                                        </span>
+                                                                    {% endif %}
+                                                                </h4>
+                                                                <div class="flex items-center text-xs text-gray-500 dark:text-gray-400 space-x-2">
+                                                                    <span>{{ (resource.file_size / 1024 / 1024)|round(2) }} MB</span>
+                                                                    <span>•</span>
+                                                                    <span>Uploaded on {{ resource.created_at.strftime('%d %b %Y') }}</span>
+                                                                    {% if resource.uploader %}
+                                                                        <span>•</span>
+                                                                        <span>By {{ resource.uploader.full_name }}</span>
+                                                                    {% endif %}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex space-x-2">
+                                                            <a href="{{ url_for('download_resource', resource_id=resource.id) }}" 
+                                                               class="px-3 py-1.5 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg flex items-center space-x-1">
+                                                                <i class="fas fa-download"></i>
+                                                                <span>Download</span>
+                                                            </a>
+                                                            {% if resource.file_type == 'pdf' %}
+                                                                <a href="{{ url_for('preview_resource', resource_id=resource.id) }}" 
+                                                                   target="_blank"
+                                                                   class="px-3 py-1.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-200 dark:hover:bg-gray-600 rounded-lg flex items-center space-x-1">
+                                                                    <i class="far fa-eye"></i>
+                                                                    <span>Preview</span>
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-12">
+                <div class="mx-auto w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                    <i class="fas fa-book-open text-gray-400 text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-1">No resources found</h3>
+                <p class="text-gray-500 dark:text-gray-400">There are no resources available for the selected filters.</p>
+                {% if current_user.is_admin() or current_user.is_teacher() %}
+                    <div class="mt-4">
+                        <a href="{{ url_for('upload_resource') }}" 
+                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <i class="fas fa-upload mr-2"></i>
+                            Upload New Resource
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+            <p class="text-sm text-gray-600 dark:text-gray-300">Western Cape Education</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-graduation-cap text-white text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Thutong</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">DoE Portal</p>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center">
+            <div class="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-flag text-white text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">DBE</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300">Dept. Basic Education</p>
+        </div>
+    </div>
+
+    <!-- Sample Textbooks -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Math Textbook -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+            <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center">
+                <i class="fas fa-calculator text-white text-6xl"></i>
+            </div>
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Mathematics Grade 12</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Comprehensive mathematics textbook covering all Grade 12 topics</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 px-2 py-1 rounded-full">Siyavula</span>
+                    <div class="flex space-x-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-download mr-1"></i>Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Science Textbook -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+            <div class="h-48 bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+                <i class="fas fa-flask text-white text-6xl"></i>
+            </div>
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Physical Science Grade 11</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Physics and Chemistry concepts for Grade 11 learners</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 px-2 py-1 rounded-full">WCED</span>
+                    <div class="flex space-x-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-download mr-1"></i>Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- English Textbook -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden card-hover">
+            <div class="h-48 bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center">
+                <i class="fas fa-book text-white text-6xl"></i>
+            </div>
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">English Home Language Grade 10</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">Literature, comprehension, and language skills</p>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 px-2 py-1 rounded-full">Thutong</span>
+                    <div class="flex space-x-2">
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-eye mr-1"></i>View
+                        </button>
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm">
+                            <i class="fas fa-download mr-1"></i>Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
