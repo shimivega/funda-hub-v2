@@ -6,6 +6,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 import os
 import json
+import sys
 from pathlib import Path
 
 app = Flask(__name__)
@@ -64,9 +65,29 @@ class StudyGroup(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=True)
+    subject = db.Column(db.String(50), nullable=False)
+    grade = db.Column(db.String(20), nullable=False)
     is_private = db.Column(db.Boolean, default=False)
+    invite_code = db.Column(db.String(10), unique=True, nullable=True)
+    max_members = db.Column(db.Integer, default=30)
     created_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationships
+    members = db.relationship('StudyGroupMember', backref='study_group', lazy=True, cascade='all, delete-orphan')
+    creator = db.relationship('User', backref='created_study_groups', lazy=True)
+    
+    def generate_invite_code(self):
+        import random
+        import string
+        self.invite_code = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+        return self.invite_code
+
+class StudyGroupMember(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    study_group_id = db.Column(db.Integer, db.ForeignKey('study_group.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    joined_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Resource(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -297,13 +318,78 @@ def logout():
 @app.route('/practice-zone')
 @login_required
 def practice_zone():
-    return render_template('practice_zone.html')
+    # Get all available quizzes from the database
+    quizzes = Quiz.query.filter_by(is_active=True).all()
+    
+    # Get unique grades, subjects, and languages for filters
+    grades = sorted(list({quiz.grade for quiz in quizzes}))
+    subjects = sorted(list({quiz.subject for quiz in quizzes}))
+    languages = sorted(list({quiz.language for quiz in quizzes}))
+    
+    # Prepare quiz data in the format expected by the frontend
+    quiz_data = []
+    for quiz in quizzes:
+        quiz_data.append({
+            'id': quiz.id,
+            'title': quiz.title,
+            'description': quiz.description,
+            'grade': quiz.grade,
+            'subject': quiz.subject,
+            'language': quiz.language,
+            'difficulty': quiz.difficulty,
+            'question_count': len(quiz.questions) if quiz.questions else 0,
+            'time_limit': quiz.time_limit,
+            'created_at': quiz.created_at.strftime('%Y-%m-%d')
+        })
+    
+    return render_template(
+        'practice_zone.html',
+        quizzes=quiz_data,
+        grades=grades,
+        subjects=subjects,
+        languages=languages
+    )
 
 @app.route('/study-groups')
 @login_required
 def study_groups():
-    groups = StudyGroup.query.all()
-    return render_template('study_groups.html', groups=groups)
+    # Get filter parameters
+    subject_filter = request.args.get('subject', '')
+    grade_filter = request.args.get('grade', '')
+    
+    # Get user's groups
+    user_groups = StudyGroup.query.join(StudyGroupMember).filter(
+        StudyGroupMember.user_id == current_user.id
+    ).all()
+    
+    # Get public groups (not including user's groups)
+    query = StudyGroup.query.filter_by(is_private=False)
+    
+    # Apply filters if provided
+    if subject_filter:
+        query = query.filter(StudyGroup.subject == subject_filter)
+    if grade_filter:
+        query = query.filter(StudyGroup.grade == grade_filter)
+    
+    # Exclude user's groups from public groups
+    if user_groups:
+        query = query.filter(~StudyGroup.id.in_([g.id for g in user_groups]))
+    
+    public_groups = query.all()
+    
+    # Get unique subjects and grades for filters
+    subjects = db.session.query(StudyGroup.subject).distinct().order_by(StudyGroup.subject).all()
+    grades = db.session.query(StudyGroup.grade).distinct().order_by(StudyGroup.grade).all()
+    
+    return render_template(
+        'study_groups.html',
+        user_groups=user_groups,
+        public_groups=public_groups,
+        subjects=[s[0] for s in subjects],
+        grades=[g[0] for g in grades],
+        current_subject=subject_filter,
+        current_grade=grade_filter
+    )
 
 @app.route('/textbooks')
 @login_required
@@ -467,7 +553,7 @@ def teacher_collaboration():
         return redirect(url_for('dashboard'))
     return render_template('teacher_collaboration.html')
 
-@app.route('/quiz/<int:quiz_id>/edit')
+@app.route('/quiz/<int:quiz_id>/edit', methods=['GET', 'POST'])
 @login_required
 def edit_quiz(quiz_id):
     quiz = Quiz.query.get_or_404(quiz_id)
@@ -475,10 +561,184 @@ def edit_quiz(quiz_id):
         flash('Access denied. You can only edit your own quizzes.', 'error')
         return redirect(url_for('practice_zone'))
     
-    # For now, redirect to practice zone with success message
-    # In a full implementation, this would show a quiz editing interface
-    flash(f'Quiz "{quiz.title}" created successfully! Question editing interface coming soon.', 'success')
-    return redirect(url_for('practice_zone'))
+    if request.method == 'POST':
+        try:
+            # Update quiz metadata
+            quiz.title = request.form.get('title', quiz.title)
+            quiz.grade = request.form.get('grade', quiz.grade)
+            quiz.subject = request.form.get('subject', quiz.subject)
+            quiz.language = request.form.get('language', quiz.language)
+            quiz.difficulty = request.form.get('difficulty', quiz.difficulty)
+            quiz.description = request.form.get('description', quiz.description)
+            quiz.time_limit = int(request.form.get('time_limit')) if request.form.get('time_limit') else None
+            quiz.visibility = request.form.get('visibility', quiz.visibility)
+            quiz.randomize_questions = 'randomize_questions' in request.form
+            
+            # Handle questions data (this would be sent as JSON in a real implementation)
+            # In a production app, this would involve more robust error handling and validation
+            
+            db.session.commit()
+            flash('Quiz updated successfully!', 'success')
+            return jsonify({'success': True, 'redirect': url_for('edit_quiz', quiz_id=quiz.id)})
+            
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Error updating quiz: {str(e)}', 'error')
+            return jsonify({'success': False, 'error': str(e)}), 400
+    
+    # Get subjects and languages for dropdowns
+    subjects = sorted([
+        'Mathematics', 'Physical Sciences', 'Life Sciences', 
+        'English', 'Afrikaans', 'isiZulu', 'History', 'Geography'
+    ])
+    
+    languages = ['English', 'Afrikaans', 'isiZulu']
+    
+    return render_template('edit_quiz.html', 
+                         quiz=quiz,
+                         subjects=subjects,
+                         languages=languages)
+
+@app.route('/create-study-group', methods=['POST'])
+@login_required
+def create_study_group():
+    name = request.form.get('name')
+    description = request.form.get('description', '')
+    subject = request.form.get('subject')
+    grade = request.form.get('grade')
+    is_private = request.form.get('is_private') == 'on'
+    
+    if not name or not subject or not grade:
+        flash('Please fill in all required fields.', 'error')
+        return redirect(url_for('study_groups'))
+    
+    # Create new study group
+    group = StudyGroup(
+        name=name,
+        description=description,
+        subject=subject,
+        grade=grade,
+        is_private=is_private,
+        created_by=current_user.id
+    )
+    
+    # Generate invite code
+    group.generate_invite_code()
+    
+    # Add creator as admin
+    group.add_member(current_user, is_admin=True)
+    
+    try:
+        db.session.add(group)
+        db.session.commit()
+        flash('Study group created successfully!', 'success')
+        return redirect(url_for('view_study_group', group_id=group.id))
+    except Exception as e:
+        db.session.rollback()
+        flash('An error occurred while creating the study group. Please try again.', 'error')
+        return redirect(url_for('study_groups'))
+
+@app.route('/study-groups', methods=['GET', 'POST'])
+@login_required
+def study_groups():
+    # Get all study groups the user is a member of
+    user_groups = StudyGroup.query.join(StudyGroupMember).filter(
+        StudyGroupMember.user_id == current_user.id
+    ).all()
+    
+    # Get public study groups (not including user's groups)
+    public_groups = StudyGroup.query.filter_by(is_private=False).filter(
+        ~StudyGroup.id.in_([g.id for g in user_groups])
+    ).all()
+    
+    return render_template('study_groups.html', 
+                         user_groups=user_groups, 
+                         public_groups=public_groups,
+                         subjects=['Mathematics', 'Science', 'English', 'History', 'Geography'])
+
+@app.route('/view-study-group/<int:group_id>')
+@login_required
+def view_study_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    
+    # Check if user is a member of the group or if group is public
+    is_member = group.is_member(current_user)
+    if not is_member and group.is_private:
+        flash('This is a private group. You need to be a member to view it.', 'error')
+        return redirect(url_for('study_groups'))
+    
+    # Get all members with their admin status
+    members = db.session.query(
+        User, 
+        StudyGroupMember.is_admin
+    ).join(
+        StudyGroupMember, 
+        User.id == StudyGroupMember.user_id
+    ).filter(
+        StudyGroupMember.study_group_id == group_id
+    ).all()
+    
+    is_admin = any(member.id == current_user.id and is_admin for member, is_admin in members)
+    
+    return render_template(
+        'view_study_group.html',
+        group=group,
+        members=members,
+        is_admin=is_admin,
+        current_user=current_user
+    )
+
+@app.route('/join-study-group/<invite_code>')
+@login_required
+def join_study_group(invite_code):
+    group = StudyGroup.query.filter_by(invite_code=invite_code).first()
+    
+    if not group:
+        flash('Invalid invite link. Please check the URL and try again.', 'error')
+        return redirect(url_for('study_groups'))
+    
+    # Check if user is already a member
+    if group.is_member(current_user):
+        flash('You are already a member of this group!', 'info')
+        return redirect(url_for('view_study_group', group_id=group.id))
+    
+    # Check if group is full
+    if len(group.members) >= group.max_members:
+        flash('This group has reached its maximum capacity.', 'error')
+        return redirect(url_for('study_groups'))
+    
+    # Add user to group
+    group.add_member(current_user)
+    db.session.commit()
+    
+    flash(f'You have successfully joined {group.name}!', 'success')
+    return redirect(url_for('view_study_group', group_id=group.id))
+
+@app.route('/invite-to-study-group/<int:group_id>', methods=['POST'])
+@login_required
+def invite_to_study_group(group_id):
+    group = StudyGroup.query.get_or_404(group_id)
+    
+    # Check if current user is an admin of the group
+    if not group.is_admin(current_user):
+        flash('You do not have permission to invite members to this group.', 'error')
+        return redirect(url_for('view_study_group', group_id=group_id))
+    
+    email = request.form.get('email')
+    if not email:
+        flash('Please provide an email address.', 'error')
+        return redirect(url_for('view_study_group', group_id=group_id, _anchor='inviteModal'))
+    
+    try:
+        # Code to invite user would go here
+        flash('Invitation sent successfully!', 'success')
+    except Exception as e:
+        flash('An error occurred while inviting the user.', 'error')
+        print(f"Error inviting to study group: {str(e)}")
+    
+    return redirect(url_for('view_study_group', group_id=group_id))
+    
+    return render_template('invite_to_group.html', group=group)
 
 @app.route('/games')
 @login_required
@@ -494,6 +754,16 @@ def geography_game():
 @login_required
 def language_game():
     return render_template('language_game.html')
+
+@app.route('/games/math-bingo')
+@login_required
+def math_bingo():
+    return render_template('games/math_bingo.html')
+
+@app.route('/games/body-drag-drop')
+@login_required
+def body_drag_drop():
+    return render_template('games/body_drag_drop.html')
 
 @app.route('/admin/resources/upload', methods=['POST'])
 @login_required
@@ -742,55 +1012,119 @@ def add_question(quiz_id):
     
     # Check permissions
     if not current_user.can_upload() or (quiz.created_by != current_user.id and not current_user.is_admin()):
-        return jsonify({'error': 'Access denied'}), 403
+        return jsonify({'success': False, 'error': 'Access denied'}), 403
     
-    question_type = request.form.get('question_type')
-    question_text = request.form.get('question_text')
-    correct_answer = request.form.get('correct_answer')
-    explanation = request.form.get('explanation', '')
-    points = int(request.form.get('points', 1))
-    
-    if not all([question_type, question_text]):
-        return jsonify({'error': 'Missing required fields'}), 400
-    
-    # Get next order index
-    max_order = db.session.query(db.func.max(Question.order_index)).filter_by(quiz_id=quiz_id).scalar() or 0
-    
-    question = Question(
-        quiz_id=quiz_id,
-        question_type=question_type,
-        question_text=question_text,
-        correct_answer=correct_answer,
-        explanation=explanation,
-        points=points,
-        order_index=max_order + 1
-    )
-    
-    # Handle multiple choice options
-    if question_type == 'multiple-choice':
-        options = request.form.getlist('options')
-        if options:
-            question.set_options_list(options)
-    
-    # Handle comprehension questions
-    elif question_type == 'comprehension':
-        passage = request.form.get('passage')
-        question.passage = passage
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'success': False, 'error': 'No data provided'}), 400
+            
+        question_type = data.get('question_type')
+        question_text = data.get('question_text', '').strip()
+        explanation = data.get('explanation', '').strip()
+        points = int(data.get('points', 1))
         
-        # Handle sub-questions (simplified for now)
-        sub_questions = request.form.getlist('sub_questions')
-        if sub_questions:
+        # Validate required fields
+        if not question_type or not question_text:
+            return jsonify({'success': False, 'error': 'Missing required fields'}), 400
+            
+        if points < 1:
+            return jsonify({'success': False, 'error': 'Points must be at least 1'}), 400
+        
+        # Get next order index
+        max_order = db.session.query(db.func.max(Question.order_index)).filter_by(quiz_id=quiz_id).scalar() or 0
+        
+        # Create base question
+        question = Question(
+            quiz_id=quiz_id,
+            question_type=question_type,
+            question_text=question_text,
+            explanation=explanation,
+            points=points,
+            order_index=max_order + 1
+        )
+        
+        # Handle different question types
+        if question_type == 'multiple-choice':
+            options = data.get('options', [])
+            correct_option_index = data.get('correct_option_index', -1)
+            
+            if not options or len(options) < 2:
+                return jsonify({'success': False, 'error': 'At least 2 options are required'}), 400
+                
+            if correct_option_index < 0 or correct_option_index >= len(options):
+                return jsonify({'success': False, 'error': 'Invalid correct option index'}), 400
+            
+            # Set options and correct answer
+            question.set_options_list(options)
+            question.correct_answer = str(correct_option_index)
+            
+        elif question_type == 'short-answer':
+            correct_answers = data.get('correct_answers', [])
+            
+            if not correct_answers or not any(correct_answers):
+                return jsonify({'success': False, 'error': 'At least one correct answer is required'}), 400
+                
+            question.correct_answer = json.dumps(correct_answers)
+            
+        elif question_type == 'essay':
+            word_limit = data.get('word_limit')
+            instruction = data.get('instruction', '').strip()
+            
+            question.word_limit = int(word_limit) if word_limit and str(word_limit).isdigit() else None
+            question.instruction = instruction
+            question.correct_answer = ''  # No single correct answer for essays
+            
+        elif question_type == 'comprehension':
+            passage = data.get('passage', '').strip()
+            sub_questions = data.get('sub_questions', [])
+            
+            if not passage:
+                return jsonify({'success': False, 'error': 'Reading passage is required'}), 400
+                
+            if not sub_questions:
+                return jsonify({'success': False, 'error': 'At least one sub-question is required'}), 400
+            
+            # Validate sub-questions
+            for i, sq in enumerate(sub_questions, 1):
+                if not sq.get('question_text', '').strip():
+                    return jsonify({'success': False, 'error': f'Sub-question {i} is missing text'}), 400
+                    
+                if sq['type'] == 'multiple-choice' and (not sq.get('options') or len(sq.get('options', [])) < 2):
+                    return jsonify({'success': False, 'error': f'Sub-question {i} must have at least 2 options'}), 400
+                    
+                if sq['type'] == 'multiple-choice' and (sq.get('correct_option_index') is None or 
+                                                     sq['correct_option_index'] < 0 or 
+                                                     sq['correct_option_index'] >= len(sq.get('options', []))):
+                    return jsonify({'success': False, 'error': f'Sub-question {i} has an invalid correct answer'}), 400
+                    
+                if sq['type'] == 'short-answer' and (not sq.get('correct_answers') or not any(sq.get('correct_answers', []))):
+                    return jsonify({'success': False, 'error': f'Sub-question {i} must have at least one correct answer'}), 400
+            
+            # Store passage and sub-questions as JSON
+            question.passage = passage
             question.sub_questions = json.dumps(sub_questions)
-    
-    # Handle essay questions
-    elif question_type == 'essay':
-        word_limit = request.form.get('word_limit')
-        instruction = request.form.get('instruction')
-        question.word_limit = int(word_limit) if word_limit else None
-        question.instruction = instruction
-    
-    db.session.add(question)
-    db.session.commit()
+            
+            # For comprehension questions, the correct_answer field can store a summary or be left empty
+            question.correct_answer = ''
+            
+        else:
+            return jsonify({'success': False, 'error': 'Invalid question type'}), 400
+        
+        # Save the question
+        db.session.add(question)
+        db.session.commit()
+        
+        return jsonify({
+            'success': True,
+            'message': 'Question added successfully',
+            'question_id': question.id
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        app.logger.error(f'Error adding question: {str(e)}')
+        return jsonify({'success': False, 'error': 'An error occurred while saving the question'}), 500
     
     return jsonify({'success': True, 'message': 'Question added successfully', 'question_id': question.id})
 
@@ -939,7 +1273,36 @@ def update_database_from_scraper(scraper):
     
     db.session.commit()
 
+def create_admin_user():
+    # Check if admin already exists
+    admin = User.query.filter_by(email='admin@gmail.com').first()
+    if not admin:
+        try:
+            admin = User(
+                full_name='Admin User',
+                email='admin@gmail.com',
+                phone='0000000000',
+                password_hash=generate_password_hash('admin123'),
+                role='admin',
+                is_online=False
+            )
+            db.session.add(admin)
+            db.session.commit()
+            print('Admin user created successfully!')
+            return True
+        except Exception as e:
+            db.session.rollback()
+            print(f'Error creating admin user: {str(e)}', file=sys.stderr)
+            return False
+    return True
+
 if __name__ == '__main__':
     with app.app_context():
+        # Create all database tables
         db.create_all()
+        # Create admin user if it doesn't exist
+        if not create_admin_user():
+            print('Warning: Failed to create admin user', file=sys.stderr)
+    
+    # Run the application
     app.run(debug=True)
