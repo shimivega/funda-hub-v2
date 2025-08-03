@@ -279,32 +279,58 @@ def login():
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        full_name = request.form['full_name']
-        email = request.form['email']
-        phone = request.form['phone']
-        password = request.form['password']
-        role = request.form['role']
-        grade = request.form.get('grade', '')
-        
-        if User.query.filter_by(email=email).first():
-            flash('Email already exists')
+        try:
+            # Get form data
+            full_name = request.form.get('full_name', '').strip()
+            email = request.form.get('email', '').strip()
+            phone = request.form.get('phone', '').strip()
+            password = request.form.get('password', '').strip()
+            role = request.form.get('role', '').strip()
+            grade = request.form.get('grade', '').strip()
+            
+            # Validate required fields
+            if not all([full_name, email, phone, password, role]):
+                flash('Please fill in all required fields', 'error')
+                return render_template('register.html')
+                
+            # Validate email format
+            if '@' not in email or '.' not in email.split('@')[1]:
+                flash('Please enter a valid email address', 'error')
+                return render_template('register.html')
+            
+            # Check if email already exists
+            if User.query.filter_by(email=email).first():
+                flash('Email already exists. Please use a different email or login.', 'error')
+                return render_template('register.html')
+            
+            # Create new user
+            user = User(
+                full_name=full_name,
+                email=email,
+                phone=phone,
+                password_hash=generate_password_hash(password),
+                role=role,
+                grade=grade if grade else None
+            )
+            
+            # Add to database
+            db.session.add(user)
+            db.session.commit()
+            
+            # Log the user in
+            login_user(user)
+            flash('Registration successful! Welcome to Funda App!', 'success')
+            return redirect(url_for('dashboard'))
+            
+        except Exception as e:
+            # Log the error
+            print(f"Error during registration: {str(e)}", file=sys.stderr)
+            # Rollback in case of error
+            db.session.rollback()
+            flash('An error occurred during registration. Please try again.', 'error')
             return render_template('register.html')
-        
-        user = User(
-            full_name=full_name,
-            email=email,
-            phone=phone,
-            password_hash=generate_password_hash(password),
-            role=role,
-            grade=grade
-        )
-        
-        db.session.add(user)
-        db.session.commit()
-        
-        login_user(user)
-        return redirect(url_for('dashboard'))
     
+    # GET request - show registration form
     return render_template('register.html')
 
 @app.route('/logout')
